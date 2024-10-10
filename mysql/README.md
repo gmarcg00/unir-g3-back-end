@@ -6,6 +6,8 @@
 - Al reproducir en vuestro ordenador, no os preocupeis por archivos *.bak que genera mysql workbenk, he añadido una regla en el fichero .gitinore....
 
 ## MySql Workbench
-![imagen](./teachersapp_mysql_2024_10_07.png)
-## Tabla **admins**
+![imagen](./teachersapp_mysql.png)
+
+## Tablas
 En la versión definitiva aquí se detallaran las tablas usadas.
+De momento destaco que se tienen llenar las tablas maestras "roles" y "knowledge_branches" 
