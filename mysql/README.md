@@ -11,3 +11,5 @@
 ## Tablas
 En la versión definitiva aquí se detallaran las tablas usadas.
 De momento destaco que se tienen llenar las tablas maestras "roles" y "knowledge_branches" 
+
+## Modificación en el archivo readme (Jon)
