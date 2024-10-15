@@ -7,7 +7,7 @@ info:
 paths:
   /greet:
     get:
-      summary: Returns a greeting message
+      summary: Students App
       description: This endpoint returns a simple greeting message.
       responses:
         '200':
