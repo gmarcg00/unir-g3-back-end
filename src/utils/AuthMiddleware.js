@@ -16,6 +16,18 @@ const checkRegisterStudentPayload = async (req, res, next) => {
     next();
 }
 
+const checkLoginPayload = (req, res, next) => {
+    const {email, password} = req.body;
+    if (!email || !password) {
+        return res.status(400).json({
+            code: 'BAD_REQUEST',
+            message: 'The request body must contain the fields: email and password'
+        });
+    }
+    next();
+}
+
 module.exports = {
-    checkRegisterStudentPayload
+    checkRegisterStudentPayload,
+    checkLoginPayload
 }
