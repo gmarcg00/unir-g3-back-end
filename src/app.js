@@ -9,6 +9,7 @@ app.use(cors());
 // Route configuration
 // Ex.
 // app.use('/api', require('./routes/api'));
+app.use('/api/auth', require('./controllers/AuthController'));
 
 // Error handler
 app.use((err, req, res, next) => {
