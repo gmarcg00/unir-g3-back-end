@@ -10,7 +10,7 @@ app.use(cors());
 // Ex.
 // app.use('/api', require('./routes/api'));
 app.use('/api/auth', require('./controllers/AuthController'));
-app.use('/api/teachers', require('./controllers/AuthController'));
+app.use('/api/teachers', require('./controllers/TeacherController'));
 
 // Error handler
 app.use((err, req, res, next) => {

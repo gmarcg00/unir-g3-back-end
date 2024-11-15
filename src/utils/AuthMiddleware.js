@@ -1,7 +1,7 @@
 const {findByEmail,findByUsername} = require('../models/UserModel');
 
 const checkRegisterStudentPayload = async (req, res, next) => {
-    const {name,last_names,phone,email,username,password,role} = req.body;
+    const {name,last_names,phone,email,username,password} = req.body;
     if (!name || !last_names || !phone || !email || !username || !password ) {
         return res.status(400).json({
             code: 'BAD_REQUEST',

@@ -17,6 +17,7 @@ router.post('/students/register',checkRegisterStudentPayload, async (req,res,nex
     }
 });
 
+
 router.post('/login', checkLoginPayload, async (req,res,next) => {
     const {email,password} = req.body;
     const user = await findByEmail(email);
