@@ -11,6 +11,7 @@ app.use(cors());
 // app.use('/api', require('./routes/api'));
 app.use('/api/auth', require('./controllers/AuthController'));
 app.use('/api/teachers', require('./controllers/TeacherController'));
+app.use('/api/students', require('./controllers/StudentController'));
 
 // Error handler
 app.use((err, req, res, next) => {
