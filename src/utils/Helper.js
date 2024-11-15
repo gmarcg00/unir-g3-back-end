@@ -9,6 +9,16 @@ const createToken = (user) => {
     return jwt.sign(data, 'clave super secreta');
 }
 
+const getTokenId = (req, res) => {
+    const token = req.headers['authorization'];
+    try{
+        let data = jwt.verify(token,'clave super secreta');
+        return data.id;
+    }catch (error){
+        return res.status(403).json({code: "UNAUTHORIZED", message: 'Invalid token.'});
+    }
+}
+
 const getTokenRole = (req, res) => {
     const token = req.headers['authorization'];
     try{
@@ -21,5 +31,6 @@ const getTokenRole = (req, res) => {
 
 module.exports = {
     createToken,
-    getTokenRole
+    getTokenRole,
+    getTokenId
 }

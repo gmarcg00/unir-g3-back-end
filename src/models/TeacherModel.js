@@ -1,6 +1,5 @@
 const pool = require("../config/db");
 
-
 async function findById(id){
     const [result] = await pool.query('SELECT * FROM teachers WHERE id = ?;', [id]);
     if(result.length === 0) return null;
