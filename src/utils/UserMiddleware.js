@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const {findById} = require('../models/UserModel');
-const {getTokenRole} = require("./Helper");
+const {getTokenRole, getTokenId} = require("./Helper");
 
 const checkToken = async (req, res, next) => {
     if(!req.headers['authorization']) return res.status(401).json({code: "UNAUTHORIZED", message: 'Token required.'});
@@ -26,7 +26,15 @@ const checkRole = (requiredRole) => {
     }
 }
 
+const checkUserId =(req,res,next) =>{
+    const requestId = getTokenId(req, res);
+    const userId = req.params.id;
+    if(userId != requestId) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized.'});
+    next();
+}
+
 module.exports = {
     checkToken,
-    checkRole
+    checkRole,
+    checkUserId
 };
