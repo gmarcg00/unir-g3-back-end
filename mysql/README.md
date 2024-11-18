@@ -9,6 +9,7 @@
 ![imagen](./teachersapp_mysql.png)
 
 ## Tablas
+
 Aquí tienes un resumen de cada tabla de la base de datos teacherapp_db junto con una breve explicación de cada campo:
 
 ### Tabla roles
