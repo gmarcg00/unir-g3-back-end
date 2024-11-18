@@ -14,7 +14,15 @@ async function activateTeacher(id){
     return result.affectedRows;
 }
 
+async function findKnowledgeBranchesByTeacherId(id){
+    const [result] = await pool.query(
+        'SELECT s.* FROM knowledge_branches s JOIN teacher_has_knowledge_branches ths ON s.id = ths.knowledge_branches_id WHERE ths.teachers_id = ?;',
+        [id]);
+    return result;
+}
+
 module.exports = {
     findById,
-    activateTeacher
+    activateTeacher,
+    findKnowledgeBranchesByTeacherId
 }

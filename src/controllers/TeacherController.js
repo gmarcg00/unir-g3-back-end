@@ -1,5 +1,5 @@
 const {checkToken, checkRole} = require("../utils/UserMiddleware");
-const {findById, activateTeacher} = require("../models/TeacherModel");
+const {findById, activateTeacher, findKnowledgeBranchesByTeacherId} = require("../models/TeacherModel");
 const {findById: findUserById} = require("../models/UserModel");
 const TeacherInfoResponse = require("./models/TeacherInfoResponse");
 const router = require('express').Router();
@@ -23,7 +23,8 @@ router.get('/:id/info',checkToken, async (req,res,next) => {
     if(teacher === null) return res.status(404).json({code: 'NOT_FOUND', message: `Teacher with id ${id} not found.`});
     const user = await findUserById(id);
     if(user === null) return res.status(500).json({code: 'INTERNAL_SERVER_ERROR', message: 'An error occurred while processing the request.'});
-    return res.status(200).json(new TeacherInfoResponse(user,teacher));
+    const knowledgeBranches = await findKnowledgeBranchesByTeacherId(id);
+    return res.status(200).json(new TeacherInfoResponse(user,teacher,knowledgeBranches));
 });
 
 
