@@ -1,13 +1,8 @@
--- Inicialmente creador desde el workbench mysql 
--- Borrando las linias iniciales , hacian falta?
-
 -- -----------------------------------------------------
--- Schema teacherapp_db
--- Si quieres cambiar el nombre de la base de datos 
--- lo cambiamos las 2 lineas siguientes :
+-- Schema magic_teachers_db
 -- ----------------------------------------------------- 
-CREATE SCHEMA IF NOT EXISTS `teacherapp_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
-USE `teacherapp_db` ;
+CREATE SCHEMA IF NOT EXISTS `magic_teachers_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
+USE `magic_teachers_db` ;
 
 
 -- -----------------------------------------------------
@@ -32,7 +27,7 @@ CREATE TABLE IF NOT EXISTS  `users` (
   `phone` VARCHAR(20) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `username` VARCHAR(20) NOT NULL,
-  `passwd` VARCHAR(25) NOT NULL,
+  `password` VARCHAR(25) NOT NULL,
   `roles_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_users_roles1_idx` (`roles_id` ASC) VISIBLE,
@@ -51,12 +46,12 @@ ENGINE = InnoDB;
 -- Table  `students`  
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS  `students` (
-  `users_id` INT NOT NULL,
-  `logical_deletion` TINYINT NOT NULL COMMENT 'Al borrar un estudiante se activará a \"true\" = \"1\" el campo logical_deletion.  ',
-  INDEX `fk_students_users1_idx` (`users_id` ASC) VISIBLE,
-  PRIMARY KEY (`users_id`),
+  `id` INT NOT NULL,
+  `active` TINYINT NOT NULL COMMENT 'When set to false is similar to logical_deletion  ',
+  INDEX `fk_students_users1_idx` (`id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_students_users1`
-    FOREIGN KEY (`users_id`)
+    FOREIGN KEY (`id`)
     REFERENCES  `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -67,16 +62,19 @@ ENGINE = InnoDB;
 -- Table  `teachers`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS  `teachers` (
-  `users_id` INT NOT NULL,
+  `id` INT NOT NULL,
   `about_me` VARCHAR(250) NOT NULL,
   `resume` VARCHAR(2000) NOT NULL,
-  `validated` VARCHAR(45) NOT NULL,
+  `validated` TINYINT NOT NULL COMMENT 'Si el profesor ha sido validado o no. ',
   `price_hour` INT NOT NULL,
   `average_score` DOUBLE NULL,
-  INDEX `fk_teachers_users1_idx` (`users_id` ASC) VISIBLE,
-  PRIMARY KEY (`users_id`),
+  `adress` VARCHAR(255) NOT NULL,
+  `city` VARCHAR(100) NOT NULL,
+  `postal_code` VARCHAR(20) NOT NULL,
+  INDEX `fk_teachers_users1_idx` (`id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_teachers_users1`
-    FOREIGN KEY (`users_id`)
+    FOREIGN KEY (`id`)
     REFERENCES  `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -99,20 +97,20 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS  `teacher_reviews` (
   `score` INT NOT NULL COMMENT 'Puntuación dada al profesor , de 1 a 5. ',
   `review` VARCHAR(1000) NOT NULL COMMENT 'Texto de opinión sobre el profesor.',
-  `students_users_id` INT NOT NULL,
-  `teachers_users_id` INT NOT NULL,
+  `students_id` INT NOT NULL,
+  `teachers_id` INT NOT NULL,
   `knowledge_branches_id` INT NOT NULL,
-  PRIMARY KEY (`students_users_id`, `teachers_users_id`, `knowledge_branches_id`),
-  INDEX `fk_teacher_reviews_teachers1_idx` (`teachers_users_id` ASC) VISIBLE,
+  PRIMARY KEY (`students_id`, `teachers_id`, `knowledge_branches_id`),
+  INDEX `fk_teacher_reviews_teachers1_idx` (`teachers_id` ASC) VISIBLE,
   INDEX `fk_teacher_reviews_knowledge_branches1_idx` (`knowledge_branches_id` ASC) VISIBLE,
   CONSTRAINT `fk_teacher_reviews_students1`
-    FOREIGN KEY (`students_users_id`)
-    REFERENCES  `students` (`users_id`)
+    FOREIGN KEY (`students_id`)
+    REFERENCES  `students` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_teacher_reviews_teachers1`
-    FOREIGN KEY (`teachers_users_id`)
-    REFERENCES  `teachers` (`users_id`)
+    FOREIGN KEY (`teachers_id`)
+    REFERENCES  `teachers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_teacher_reviews_knowledge_branches1`
@@ -130,22 +128,22 @@ CREATE TABLE IF NOT EXISTS  `student_teacher_relations` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `register_data` DATE NOT NULL,
   `withdraw_data` DATE NULL,
-  `students_users_id` INT NOT NULL,
-  `teachers_users_id` INT NOT NULL,
+  `students_id` INT NOT NULL,
+  `teachers_id` INT NOT NULL,
   `knowledge_branches_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_student_teacher_relations_students1_idx` (`students_users_id` ASC) VISIBLE,
-  INDEX `fk_student_teacher_relations_teachers1_idx` (`teachers_users_id` ASC) VISIBLE,
+  INDEX `fk_student_teacher_relations_students1_idx` (`students_id` ASC) VISIBLE,
+  INDEX `fk_student_teacher_relations_teachers1_idx` (`teachers_id` ASC) VISIBLE,
   INDEX `fk_student_teacher_relations_knowledge_branches1_idx` (`knowledge_branches_id` ASC) VISIBLE,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_student_teacher_relations_students1`
-    FOREIGN KEY (`students_users_id`)
-    REFERENCES  `students` (`users_id`)
+    FOREIGN KEY (`students_id`)
+    REFERENCES  `students` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_student_teacher_relations_teachers1`
-    FOREIGN KEY (`teachers_users_id`)
-    REFERENCES  `teachers` (`users_id`)
+    FOREIGN KEY (`teachers_id`)
+    REFERENCES  `teachers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_student_teacher_relations_knowledge_branches1`
@@ -161,24 +159,21 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS  `teachers_has_knowledge_branches` (
   `knowledge_branches_id` INT NOT NULL,
-  `teachers_users_id` INT NOT NULL,
-  PRIMARY KEY (`knowledge_branches_id`, `teachers_users_id`),
+  `teachers_id` INT NOT NULL,
+  PRIMARY KEY (`knowledge_branches_id`, `teachers_id`),
   INDEX `fk_teachers_has_knowledge_branches_knowledge_branches1_idx` (`knowledge_branches_id` ASC) VISIBLE,
-  INDEX `fk_teachers_has_knowledge_branches_teachers1_idx` (`teachers_users_id` ASC) VISIBLE,
+  INDEX `fk_teachers_has_knowledge_branches_teachers1_idx` (`teachers_id` ASC) VISIBLE,
   CONSTRAINT `fk_teachers_has_knowledge_branches_knowledge_branches1`
     FOREIGN KEY (`knowledge_branches_id`)
     REFERENCES  `knowledge_branches` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_teachers_has_knowledge_branches_teachers1`
-    FOREIGN KEY (`teachers_users_id`)
-    REFERENCES  `teachers` (`users_id`)
+    FOREIGN KEY (`teachers_id`)
+    REFERENCES  `teachers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-
 
 
 -- -----------------------------------------------------
@@ -186,23 +181,24 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS  `chats` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `students_users_id` INT NOT NULL,
-  `teachers_users_id` INT NOT NULL,
+  `students_id` INT NOT NULL,
+  `teachers_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_chats_students1_idx` (`students_users_id` ASC) VISIBLE,
-  INDEX `fk_chats_teachers1_idx` (`teachers_users_id` ASC) VISIBLE,
+  INDEX `fk_chats_students1_idx` (`students_id` ASC) VISIBLE,
+  INDEX `fk_chats_teachers1_idx` (`teachers_id` ASC) VISIBLE,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `fk_chats_students1`
-    FOREIGN KEY (`students_users_id`)
-    REFERENCES  `students` (`users_id`)
+    FOREIGN KEY (`students_id`)
+    REFERENCES  `students` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_chats_teachers1`
-    FOREIGN KEY (`teachers_users_id`)
-    REFERENCES  `teachers` (`users_id`)
+    FOREIGN KEY (`teachers_id`)
+    REFERENCES  `teachers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table  `messages` 
