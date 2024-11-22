@@ -1,5 +1,5 @@
 const {checkToken, checkRole} = require("../utils/UserMiddleware");
-const {findById, activateTeacher, findKnowledgeBranchesByTeacherId} = require("../models/TeacherModel");
+const {findById, activateTeacher, findKnowledgeBranchesByTeacherId, findAll} = require("../models/TeacherModel");
 const {findById: findUserById} = require("../models/UserModel");
 const TeacherInfoResponse = require("./models/TeacherInfoResponse");
 const router = require('express').Router();
@@ -15,6 +15,17 @@ router.post('/:id/activate', checkToken, checkRole(1), async (req,res,next) => {
     }catch (error){
         next(error);
     }
+});
+
+router.get('', async (req,res,next) => {
+    const {active = 1, page = 1, page_size= 10} = req.query;
+    const teachers = await findAll(active,page_size,page);
+    const response = await Promise.all(teachers.map(async (teacher) => {
+        let user = await findUserById(teacher.id);
+        let knowledgeBranches = await findKnowledgeBranchesByTeacherId(teacher.id);
+        return new TeacherInfoResponse(user,teacher,knowledgeBranches);
+    }))
+    return res.status(200).json(response);
 });
 
 router.get('/:id/info',checkToken, async (req,res,next) => {

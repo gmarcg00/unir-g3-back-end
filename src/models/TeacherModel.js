@@ -21,8 +21,18 @@ async function findKnowledgeBranchesByTeacherId(id){
     return result;
 }
 
+async function findAll(active, size, page) {
+    const offset = (page - 1) * size;
+    const [result] = await pool.query(
+        'SELECT * FROM teachers WHERE active = ? LIMIT ? OFFSET ?',
+        [active, size, offset]
+    );
+    return result;
+}
+
 module.exports = {
     findById,
     activateTeacher,
-    findKnowledgeBranchesByTeacherId
+    findKnowledgeBranchesByTeacherId,
+    findAll
 }
