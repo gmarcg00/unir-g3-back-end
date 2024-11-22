@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS  `users` (
   `phone` VARCHAR(20) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `username` VARCHAR(20) NOT NULL,
-  `password` VARCHAR(25) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
   `roles_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_users_roles1_idx` (`roles_id` ASC) VISIBLE,
