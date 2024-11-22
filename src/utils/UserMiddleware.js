@@ -8,7 +8,6 @@ const checkToken = async (req, res, next) => {
     let data;
     try{
         data = jwt.verify(token,'clave super secreta');
-        console.log(data);
     }catch (error){
         return res.status(403).json({code: "UNAUTHORIZED", message: 'Invalid token.'});
     }
@@ -21,7 +20,7 @@ const checkToken = async (req, res, next) => {
 const checkRole = (requiredRole) => {
     return (req,res,next) =>{
         const requestRole = getTokenRole(req, res);
-        if(requestRole !== requiredRole) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized (IN CHECKROLE).'});
+        if(requestRole !== requiredRole) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized .'});
         next();
     }
 }
@@ -30,7 +29,7 @@ const checkUserId =(req,res,next) =>{
     /// convertido a string para comparar string con string
     const requestId = (getTokenId(req, res)).toString();
     const userId = req.params.id;
-    if(userId != requestId) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized. IN CHECKUSERID'});
+    if(userId != requestId) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized.'});
     next();
 }
 
