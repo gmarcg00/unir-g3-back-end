@@ -21,14 +21,20 @@ async function findKnowledgeBranchesByTeacherId(id){
     return result;
 }
 
-async function findAll(active, size, page){
+async function findAll(active, size, page,sort,order){
     const offset = (page - 1) * size;
+    const validSortFields = ['id', 'price_hour', 'average_rating'];
+    const validOrderValues = ['ASC', 'DESC'];
+
+    const sortField = validSortFields.includes(sort) ? sort : 'id';
+    const sortOrder = validOrderValues.includes(order.toUpperCase()) ? order.toUpperCase() : 'ASC';
+
     const [[totalResult]] = await pool.query(
         'SELECT COUNT(*) as total FROM teachers WHERE active = ?',
         [active]
     );
     const [data] = await pool.query(
-        'SELECT * FROM teachers WHERE active = ? LIMIT ? OFFSET ?',
+        `SELECT * FROM teachers WHERE active = ? ORDER BY ${sortField} ${sortOrder} LIMIT ? OFFSET ?`,
         [active, size, offset]
     );
     return {
