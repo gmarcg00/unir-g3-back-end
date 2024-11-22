@@ -4,8 +4,9 @@ const createToken = (user) => {
     const data = {
         id: user.id,
         email: user.email,
-        role: user.role_id
+        role: user.roles_id
     }
+    console.log(data);
     return jwt.sign(data, 'clave super secreta');
 }
 
