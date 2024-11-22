@@ -7,7 +7,7 @@ Content-Type: application/json
     "password": "12345678"
 }
 
-## Informacion de cualquier usuario
+## Informacion de usuarios administradores
 ###
-GET http://localhost:3000/api/admins/2/info
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjMxMjkzNX0.wPXC-NOZyDuvdNdLMC5JzGkLD4tzdxdN6EK5Oj9_ER4
+GET http://localhost:3000/api/admins/1/info
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjMxNTA0N30.qxL6s9iCy5w2DrWl8TE-c4KXksTaq8TXxesxyayY7gM

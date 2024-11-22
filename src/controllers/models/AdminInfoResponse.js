@@ -7,7 +7,7 @@ class AdminInfoResponse {
         this.email = user.email;
         this.username = user.username;
         this.image = user.image;
-        this.role = user.role_id;
+        this.role = user.roles_id;
     }
 
 }

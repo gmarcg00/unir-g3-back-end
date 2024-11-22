@@ -21,15 +21,16 @@ const checkToken = async (req, res, next) => {
 const checkRole = (requiredRole) => {
     return (req,res,next) =>{
         const requestRole = getTokenRole(req, res);
-        if(requestRole !== requiredRole) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized.'});
+        if(requestRole !== requiredRole) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized (IN CHECKROLE).'});
         next();
     }
 }
 
 const checkUserId =(req,res,next) =>{
-    const requestId = getTokenId(req, res);
+    /// convertido a string para comparar string con string
+    const requestId = (getTokenId(req, res)).toString();
     const userId = req.params.id;
-    if(userId != requestId) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized.'});
+    if(userId != requestId) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized. IN CHECKUSERID'});
     next();
 }
 
