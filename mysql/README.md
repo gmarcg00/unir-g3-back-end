@@ -6,7 +6,7 @@
 - Al reproducir en vuestro ordenador, no os preocupeis por archivos *.bak que genera mysql workbenk, he añadido una regla en el fichero .gitinore....
 
 ## MySql Workbench
-![imagen](./teachersapp_mysql.png)
+![imagen](./magic_teachers_db.png)
 
 ## Tablas
 
@@ -33,21 +33,24 @@ rols_id (INT): Identificador del rol asociado al usuario (enlace con la tabla ro
 ```
 
 ### Tabla students
- Almacena información adicional sobre los estudiantes, que de momento solo és `logical_deletion`, un campo para marcar si un estudiante ha sido eliminado de forma lógica (1 = eliminado, 0 = activo).
+ Almacena información adicional sobre los estudiantes, que de momento solo és `active`, un campo para marcar si un estudiante está activo o eliminado de forma lógica (1 = activo, 0 = eliminado logicamente).
 ``` 
-logical_deletion (TINYINT) : campo marcado eliminación_logica.
-users_id (INT): Identificador del usuario que corresponde al estudiante (enlace con la tabla users).
+active (TINYINT) : campo activo o eliminación logica.
+id (INT): Identificador del usuario que corresponde al estudiante (Clave primaria procedente de la tabla users).
 ```
 
 ### Tabla teachers
  Almacena información adicional sobre los profesores.
 ``` 
-users_id (INT): Identificador del usuario que corresponde al profesor (enlace con la tabla users).
+id (INT): Identificador del usuario que corresponde al profesor (Clave primaria procedente de la tabla users).
 about_me (VARCHAR(250)): Descripción del profesor.
 resume (VARCHAR(2000)): Resumen o CV del profesor.
 validated (VARCHAR(45)): Estado de validación del profesor (si está validado o no).
 price_hour (INT): Precio por hora que cobra el profesor.
 average_square (DOUBLE): Promedio de la calificación del profesor.
+adress (VARCHAR(255)): Direccion del profesor.
+city (VARCHAR(100)): Ciudad del profesor.
+postal_code (VARCHAR(20)): Codigo postal del profesor.
 ```
 
 ### Tabla teacher_reviews
@@ -63,11 +66,11 @@ teachers_users_id (INT): Identificador del profesor que recibe la reseña (enlac
 Almacena las distintas áreas de conocimiento o ramas en las que los profesores pueden enseñar.
 ``` 
 id (INT): Identificador único para cada área de conocimiento.
-name (VARCHAR(45)): Nombre del área de conocimiento (por ejemplo, "Matemáticas", "Física").
+name (VARCHAR(45)): Nombre del área de conocimiento.
 ```
 
 ### Tabla student_registrations
-Almacena los registros de inscripción de estudiantes con profesores. Una fecha de inscripción y otra de baja dnos permite llevar un registro de todos los registros activos de la plataforma. Un alumno puede apuntarse con el mismo profesor el siguiente año. 
+Almacena los registros de inscripción de estudiantes con profesores. Una fecha de inscripción y otra de baja nos permite llevar un registro de todos los registros activos de la plataforma. Un alumno puede apuntarse con el mismo profesor el siguiente año. 
 ``` 
 id (INT): Identificador único para cada registro.
 register_data (DATE): Fecha de inscripción del estudiante.
