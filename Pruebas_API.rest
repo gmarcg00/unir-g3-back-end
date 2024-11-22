@@ -1,0 +1,12 @@
+###
+POST http://localhost:3000/api/auth/login/
+Content-Type: application/json
+
+{
+    "email": "albus.dumbledore@hogwarts.edu",
+    "password": "12345678"
+}
+
+###
+GET http://localhost:3000/api/admins/2/info
+Authorization: 
