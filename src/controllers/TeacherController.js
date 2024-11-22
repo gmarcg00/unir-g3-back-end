@@ -19,12 +19,16 @@ router.post('/:id/activate', checkToken, checkRole(1), async (req,res,next) => {
 
 router.get('', async (req,res,next) => {
     const {active = 1, page = 1, page_size= 10} = req.query;
-    const teachers = await findAll(active,page_size,page);
-    const response = await Promise.all(teachers.map(async (teacher) => {
+    const teachers = await findAll(active,Number(page_size),Number(page));
+    const data = await Promise.all(teachers.data.map(async (teacher) => {
         let user = await findUserById(teacher.id);
         let knowledgeBranches = await findKnowledgeBranchesByTeacherId(teacher.id);
         return new TeacherInfoResponse(user,teacher,knowledgeBranches);
     }))
+    const response = {
+        total: teachers.total,
+        data
+    }
     return res.status(200).json(response);
 });
 

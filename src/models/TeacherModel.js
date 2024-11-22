@@ -21,13 +21,20 @@ async function findKnowledgeBranchesByTeacherId(id){
     return result;
 }
 
-async function findAll(active, size, page) {
+async function findAll(active, size, page){
     const offset = (page - 1) * size;
-    const [result] = await pool.query(
+    const [[totalResult]] = await pool.query(
+        'SELECT COUNT(*) as total FROM teachers WHERE active = ?',
+        [active]
+    );
+    const [data] = await pool.query(
         'SELECT * FROM teachers WHERE active = ? LIMIT ? OFFSET ?',
         [active, size, offset]
     );
-    return result;
+    return {
+        total: totalResult.total,
+        data,
+    };
 }
 
 module.exports = {
