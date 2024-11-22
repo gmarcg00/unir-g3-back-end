@@ -18,7 +18,7 @@ router.post('/:id/activate', checkToken, checkRole(1), async (req,res,next) => {
 });
 
 router.get('', async (req,res,next) => {
-    const {active = 1, page = 1, page_size= 10, sort = "id", order="ASC"} = req.query;
+    const {active = 0, page = 1, page_size= 10, sort = "id", order="ASC"} = req.query;
     const teachers = await findAll(active,Number(page_size),Number(page),sort,order);
     const data = await Promise.all(teachers.data.map(async (teacher) => {
         let user = await findUserById(teacher.id);
