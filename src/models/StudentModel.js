@@ -12,6 +12,24 @@ async function deleteStudent(id) {
     return result.affectedRows;
 }
 
+async function getAll() {
+    const [result] = await pool.query(
+        `SELECT 
+        users.*,
+        students.active
+    FROM 
+        users
+    INNER JOIN 
+        students ON users.id = students.id
+    INNER JOIN 
+        roles ON users.role_id = roles.id
+    WHERE 
+        roles.name = 'student';`
+    );
+
+    return result;
+}
+
 module.exports = {
-    findById, deleteStudent
+    findById, deleteStudent, getAll
 }

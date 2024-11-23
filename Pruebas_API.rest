@@ -14,7 +14,14 @@ Content-Type: application/json
 GET {{url}}/api/admins/1/info
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM1ODM5MH0.K3GsLGkBWXONbrPM7oUifWj8sk9wY0Sx435jVFZqaQg
 
-### Student deletion
+### Admin : Student deletion
 PATCH {{url}}/api/students/3/delete
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
+### Admin: Students list : Returns students array.
+GET {{url}}/api/students/all
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
+
+### Teacher: list of students he has now (table Relation)
+
+### Student: list of the teachers he has now
