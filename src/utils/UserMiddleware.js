@@ -26,7 +26,6 @@ const checkRole = (requiredRole) => {
 }
 
 const checkUserId =(req,res,next) =>{
-    /// convertido a string para comparar string con string
     const requestId = (getTokenId(req, res)).toString();
     const userId = req.params.id;
     if(userId != requestId) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized.'});
