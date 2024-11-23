@@ -1,3 +1,5 @@
+-- NO USAR ESTE FICHERO, SOLO PARA CONSULTAS, USAR db.sql
+
 -- -----------------------------------------------------
 -- Schema magic_teachers_db
 -- ----------------------------------------------------- 
