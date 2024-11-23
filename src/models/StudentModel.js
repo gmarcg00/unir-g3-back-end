@@ -12,13 +12,6 @@ async function deleteStudent(id) {
     return result.affectedRows;
 }
 
-
-// ONLY TEST POURPOSES
-async function restoreStudent(id) {
-    const [result] = await pool.query('UPDATE students SET active = ? WHERE id = ?',
-        [true, id]);
-    return result.affectedRows;
-}
 module.exports = {
-    findById, deleteStudent, restoreStudent
+    findById, deleteStudent
 }

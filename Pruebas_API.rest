@@ -18,7 +18,3 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1
 PATCH {{url}}/api/students/3/delete
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
-## FOR TESTING PURPOSES ONLY, NOT REQUIRED
-### Student Restore active
-PATCH {{url}}/api/students/3/restore
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
