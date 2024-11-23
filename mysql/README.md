@@ -6,7 +6,7 @@
 - Al reproducir en vuestro ordenador, no os preocupeis por archivos *.bak que genera mysql workbenk, he añadido una regla en el fichero .gitinore....
 
 ## MySql Workbench
-![imagen](./magic_teachers_db.png)
+![imagen](./db.png)
 
 ## Tablas
 
