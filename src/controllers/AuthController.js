@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const bcrypt  = require('bcryptjs')
-const {register, saveStudent, findById, findByEmail} = require("../models/UserModel");
+const {register, saveStudent, saveTeacher, saveTeacherBranches, findById, findByEmail} = require("../models/UserModel");
 const {createToken} = require("../utils/Helper");
-const {checkRegisterStudentPayload, checkLoginPayload} = require("../utils/AuthMiddleware");
+const {checkRegisterStudentPayload, checkRegisterTeacherPayload, checkLoginPayload} = require("../utils/AuthMiddleware");
 
 router.post('/students/register',checkRegisterStudentPayload, async (req,res,next) => {
     req.body.password = await bcrypt.hash(req.body.password,8);
@@ -17,6 +17,22 @@ router.post('/students/register',checkRegisterStudentPayload, async (req,res,nex
     }
 });
 
+router.post('/teachers/register', checkRegisterTeacherPayload, async (req,res,next) => {
+    req.body.password = await bcrypt.hash(req.body.password,8);
+    const {description, resume, price_hour, address, city, postal_code, branches } = req.body;
+    //console.log('AuthController.js --> /teachers/register')
+    //console.log(branches)
+    try{
+        const userId = await register(req.body)
+        await saveTeacher(userId, description, resume, price_hour, address, city, postal_code)
+        await saveTeacherBranches(userId, branches)
+        const user = await findById(userId);
+        const token = createToken(user);
+        return res.status(201).json({token: token});
+    }catch (error){
+        next(error);
+    }
+});
 
 router.post('/login', checkLoginPayload, async (req,res,next) => {
     const {email,password} = req.body;
