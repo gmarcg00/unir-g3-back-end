@@ -50,6 +50,7 @@ router.get('/:id/students', checkToken, checkRole(3), async (req, res, next) => 
     // // if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${id} not found.` });
     // const students = await findStudentByTeacherId(id);
     // if (students === null) return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR', message: 'An error occurred while processing the request.' });
+
     return res.status(200).json("Debe devolver array con estudiantes del profesor");
 })
 

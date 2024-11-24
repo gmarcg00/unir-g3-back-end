@@ -1,6 +1,6 @@
 
 const router = require('express').Router();
-const { findById, deleteStudent, getAll } = require("../models/StudentModel");
+const { findById, deleteStudent, findAllStudents } = require("../models/StudentModel");
 const { findById: findUserById } = require("../models/UserModel");
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
 const StudentInfoResponse = require("./models/StudentInfoResponse");
@@ -28,8 +28,8 @@ router.patch('/:id/delete', checkToken, checkRole(1), async (req, res, next) => 
 });
 
 // Admin : Complete students list
-router.get('/all', checkToken, checkRole(1), async (req, res, next) => {
-    const students = await getAll();
+router.get('/', checkToken, checkRole(1), async (req, res, next) => {
+    const students = await findAllStudents();
     return res.status(200).json(students);
 })
 

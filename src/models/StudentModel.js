@@ -12,10 +12,17 @@ async function deleteStudent(id) {
     return result.affectedRows;
 }
 
-async function getAll() {
+async function findAllStudents() {
     const [result] = await pool.query(
         `SELECT 
-        users.*,
+        users.id,
+        users.name,
+        users.last_names,
+        users.phone,
+        users.email,
+        users.username,
+        users.image,
+        users.role_id,
         students.active
     FROM 
         users
@@ -38,5 +45,5 @@ async function findStudentByTeacherId(id) {
     return result;
 }
 module.exports = {
-    findById, deleteStudent, getAll, findStudentByTeacherId
+    findById, deleteStudent, findAllStudents, findStudentByTeacherId
 }
