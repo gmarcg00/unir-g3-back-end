@@ -30,6 +30,13 @@ async function getAll() {
     return result;
 }
 
+
+async function findStudentByTeacherId(id) {
+    const [result] = await pool.query(
+        'SELECT * FROM students WHERE id = ?;',
+        [id]);
+    return result;
+}
 module.exports = {
     findById, deleteStudent, getAll
 }

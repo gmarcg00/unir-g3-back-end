@@ -23,5 +23,7 @@ GET {{url}}/api/students/all
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
 ### Teacher: list of students he has now (table Relation)
+GET {{url}}/api/teachers/8/students
+/// checkToken, checkRole(3),
 
 ### Student: list of the teachers he has now
