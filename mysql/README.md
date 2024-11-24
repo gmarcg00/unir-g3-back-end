@@ -1,9 +1,10 @@
 # Apuntes para la creación de la BD relacional.
 
 ## Notas:
-- La base de datos ha sido diseñada directamente sobre MySql workbench.
-- En algunos campos, no se si el tamaño de caracteres es adecuado. Aunque no es nuestro rol diseñar bases de datos quizas tengais una opinión, bienvenida es ...
-- Al reproducir en vuestro ordenador, no os preocupeis por archivos *.bak que genera mysql workbenk, he añadido una regla en el fichero .gitinore....
+- Ejecuta primero db.sql y después db_insert_test_data.sql.
+- La base de datos se llama hogwarts, usuario root, password root, puerto 3306.
+- Los datos test de usuarios por id : 1 administrador , de la id 2 a la 7 estudiantes y 8-12 profes.
+- 
 
 ## MySql Workbench
 ![imagen](./db.png)
