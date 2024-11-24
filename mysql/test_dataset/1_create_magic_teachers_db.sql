@@ -65,12 +65,12 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS  `teachers` (
   `id` INT NOT NULL,
-  `about_me` VARCHAR(250) NOT NULL,
+  `description` VARCHAR(250) NOT NULL,
   `resume` VARCHAR(2000) NOT NULL,
   `validated` TINYINT NOT NULL COMMENT 'Si el profesor ha sido validado o no. ',
   `price_hour` INT NOT NULL,
   `average_score` DOUBLE NULL,
-  `adress` VARCHAR(255) NOT NULL,
+  `address` VARCHAR(255) NOT NULL,
   `city` VARCHAR(100) NOT NULL,
   `postal_code` VARCHAR(20) NOT NULL,
   INDEX `fk_teachers_users1_idx` (`id` ASC) VISIBLE,

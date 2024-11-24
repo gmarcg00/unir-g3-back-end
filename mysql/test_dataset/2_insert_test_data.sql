@@ -12,10 +12,10 @@ INSERT INTO `roles` (`name`) VALUES
 ---------------------------------------
 -- Todas las Passwords encryptadas con bcrypt 8 iteraciones, con la clave super secreta: 12345678
 INSERT INTO `users` (`username`, `name`, `last_names`, `phone`, `email`, `password`, `role_id`) VALUES
--- Admin
+-- Admin (1)
 ('albus.dumbledore', 'Albus', 'Dumbledore', '601123456', 'albus.dumbledore@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 1),
 
--- Students
+-- Students (2 - 7)
 ('harry.potter', 'Harry', 'Potter', '603123458', 'harry.potter@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 2),
 ('hermione.granger', 'Hermione', 'Granger', '604123459', 'hermione.granger@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 2),
 ('luna.lovegood', 'Luna', 'Lovegood', '607123452', 'luna.lovegood@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 2),
@@ -24,10 +24,12 @@ INSERT INTO `users` (`username`, `name`, `last_names`, `phone`, `email`, `passwo
 ('cho.chang', 'Cho', 'Chang', '611123456', 'cho.chang@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 2);
 
 
--- Teachers
+-- Teachers (8 - 12)
 ('severus.snape', 'Severus', 'Snape', '615123450', 'severus.snape@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 3),
 ('minerva.mcgonagall', 'Minerva', 'McGonagall', '602123457', 'minerva.mcgonagall@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 3);
-
+('remus.lupin', 'Remus', 'Lupin', '617123452', 'remus.lupin@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 3),
+('gilderoy.lockhart', 'Gilderoy', 'Lockhart', '618123453', 'gilderoy.lockhart@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 3),
+('sybill.trelawney', 'Sybill', 'Trelawney', '620123455', 'sybill.trelawney@hogwarts.edu', '$2a$08$t0RQ.6jfYyNJ2IJ.X8gFQO2..hloAJyH/zlAHXd.v0sE0s8JD.pcy', 3);
 
 
 -- Insert knowledge_branches
@@ -38,8 +40,7 @@ INSERT INTO `knowledge_branches` (`name`) VALUES
 ('Charms'),                       -- Filius Flitwick
 ('Herbology'),                    -- Pomona Sprout
 ('Defence Against the Dark Arts'),-- Remus Lupin
-('Defence Against the Dark Arts'),-- Gilderoy Lockhart
-('Dark Arts Enforcement'),        -- Dolores Umbridge
+('Dark Arts Enforcement'),        -- Gilderoy Lockhart
 ('Divination'),                   -- Sybill Trelawney
 ('Potions'),                      -- Horace Slughorn
 ('Auror Studies');                -- Alastor Moody
@@ -48,8 +49,7 @@ INSERT INTO `knowledge_branches` (`name`) VALUES
 -- Insert teachers info 
 ---------------------------------------
 
--- Insert Severus Snape into teachers
-INSERT INTO `teachers` (`id`, `about_me`, `resume`, `price_hour`, `validated`, `adress`, `city`, `postal_code` )
+--- Insert Severus Snape into teachers
 SELECT id, 
     'Potions Master and former Head of Slytherin House.',
     'Severus Snape is a highly skilled wizard in Potions and Occlumency. 
@@ -64,8 +64,51 @@ SELECT id,
 FROM users
 WHERE username = 'severus.snape';
 
+-- Insert Remus Lupin into teachers
+SELECT id, 
+    'Defence Against the Dark Arts professor and member of the Order of the Phoenix.',
+    'Remus Lupin is a skilled wizard with a kind and empathetic nature. 
+     Despite his condition as a werewolf, he dedicated his life to teaching and 
+     fighting against the forces of darkness. His classes were practical, engaging, 
+     and beloved by students.',
+    90,
+    1,
+    'Avenida de la Constitución, 15',
+    'Alcalá de Henares',
+    '28801'
+FROM users
+WHERE username = 'remus.lupin';
+
+-- Insert Gilderoy Lockhart into teachers
+SELECT id, 
+    'Famous author and former Defence Against the Dark Arts professor.',
+    'Gilderoy Lockhart is a charming yet self-absorbed wizard known for his 
+     books on magical creatures and encounters. Though his competence as a teacher 
+     was questionable, his flamboyant personality and charisma made him a memorable figure.',
+    100,
+    1,
+    'Calle Mayor, 12',
+    'San Lorenzo de El Escorial',
+    '28200'
+FROM users
+WHERE username = 'gilderoy.lockhart';
+
+-- Insert Sybill Trelawney into teachers
+SELECT id, 
+    'Divination professor at Hogwarts.',
+    'Sybill Trelawney is a seer who teaches Divination at Hogwarts. 
+     Often eccentric and dramatic, she is known for her cryptic prophecies. 
+     Though not always accurate, she has made a few genuine predictions 
+     that were crucial to the wizarding world.',
+    65,
+    1,
+    'Calle de la Luna, 3',
+    'Aranjuez',
+    '28300'
+FROM users
+WHERE username = 'sybill.trelawney';
+
 -- Insert Minerva McGonagall into teachers
-INSERT INTO `teachers` (`id`, `about_me`, `resume`, `price_hour`, `validated`, `adress`, `city`, `postal_code` )
 SELECT id, 
     'Transfiguration professor and Head of Gryffindor House.',
     'Minerva McGonagall is a strict yet fair Transfiguration teacher and Head of Gryffindor House. 
@@ -74,21 +117,29 @@ SELECT id,
      fight against Voldemort, exemplifying courage, wisdom, and leadership.',
     95,
     1,
-    'Calle Mayor, 5',
-    'Alcala de Henares',
-    '28001'
+    'Calle de los Álamos, 8',
+    'Torrelodones',
+    '28250'
 FROM users
 WHERE username = 'minerva.mcgonagall';
 
 -- Insert relationships into the teachers_has_knowledge_branches table
 INSERT INTO `teachers_has_knowledge_branches` (`teachers_id`, `knowledge_branches_id`) VALUES
 -- Severus Snape teaches Defence Against the Dark Arts and Potions ...
- (4,1),
- (4,9),
+ (8,1),
+ (8,9),
+-- Remus Lupin teaches ...
+ (9,1),
+ (9,2),
+ (9,3),
+-- Gilderoy Lockhart teaches ...
+ (10,4),
+-- Sybill Trelawney teaches ...
+ (11,5),
 -- Minerva McGonagall teaches ...
- (5,6),
- (5,7),
- (5,8);
+ (12,6),
+ (12,7),
+ (12,8);
 
 
 -- Insert records into the students table
@@ -101,7 +152,11 @@ WHERE id IN (
     FROM `users`
     WHERE username IN (
         'harry.potter',
-        'hermione.granger'
+        'hermione.granger',
+        'luna.lovegood',
+        'ginny.weasley',
+        'cedric.diggory',
+        'cho.chang'
     )
 );
 
