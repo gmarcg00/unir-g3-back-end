@@ -38,5 +38,5 @@ async function findStudentByTeacherId(id) {
     return result;
 }
 module.exports = {
-    findById, deleteStudent, getAll
+    findById, deleteStudent, getAll, findStudentByTeacherId
 }
