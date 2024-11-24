@@ -27,7 +27,7 @@ PATCH {{url}}/api/students/3/delete
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
 ### Admin: Students list : Returns students array.
-GET {{url}}/api/students/all
+GET {{url}}/api/students
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
 ### Teacher: list of students he has now (table Relation)
