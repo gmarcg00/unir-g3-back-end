@@ -20,8 +20,6 @@ router.post('/students/register',checkRegisterStudentPayload, async (req,res,nex
 router.post('/teachers/register', checkRegisterTeacherPayload, async (req,res,next) => {
     req.body.password = await bcrypt.hash(req.body.password,8);
     const {description, resume, price_hour, address, city, postal_code, branches } = req.body;
-    //console.log('AuthController.js --> /teachers/register')
-    //console.log(branches)
     try{
         const userId = await register(req.body)
         await saveTeacher(userId, description, resume, price_hour, address, city, postal_code)

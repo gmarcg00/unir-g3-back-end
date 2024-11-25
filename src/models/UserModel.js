@@ -22,12 +22,9 @@ async function saveTeacher(id, description, resume, price_hour, address, city, p
 }
 
 async function saveTeacherBranches(userId, branches) {
-// hay que recorrer el objeto "branches" y hacer un insert para cada uno
     const results = []
     const sql_statement = 'INSERT INTO teacher_has_knowledge_branches (teachers_id, knowledge_branches_id) VALUES (?,?)';   
-    //console.log('UserModels.js --> saveTeacherBranches()')
     for (let branch of branches){
-            //console.log(branch)
             const values = [userId, branch];
             const result = await pool.query( sql_statement, values);
             results.push(result);
