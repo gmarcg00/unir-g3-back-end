@@ -1,8 +1,7 @@
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
-const { findById, activateTeacher, findKnowledgeBranchesByTeacherId, findAll } = require("../models/TeacherModel");
+const { findById, activateTeacher, findKnowledgeBranchesByTeacherId, findAll, findStudentsByTeacherId } = require("../models/TeacherModel");
 const { findById: findUserById } = require("../models/UserModel");
 const TeacherInfoResponse = require("./models/TeacherInfoResponse");
-const { findStudentByTeacherId } = require("../models/StudentModel");
 const router = require('express').Router();
 
 router.post('/:id/activate', checkToken, checkRole(1), async (req, res, next) => {
@@ -42,16 +41,19 @@ router.get('/:id/info', checkToken, async (req, res, next) => {
     const knowledgeBranches = await findKnowledgeBranchesByTeacherId(id);
     return res.status(200).json(new TeacherInfoResponse(user, teacher, knowledgeBranches));
 });
+
 // Sobre este endpoint, la consulta en base de datos no es correcta. Tendrás que buscar en la tabla intermedia entre profesores y alumnos, quedarte con los registros en los que aparezca el id del profesor, y luego hacer el join para recuperar la información de los estudiantes y usuarios. Lo que se tiene que devolver finalmente es un array de StudentInfoResponse.
 /// Teacher: list of students he has now (table Relation)
 router.get('/:id/students', checkToken, checkRole(3), async (req, res, next) => {
     const teacher_id = req.params.id;
-
     const teacher = await findById(teacher_id);
     if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} not found.` });
-    const students = await findStudentByTeacherId(teacher_id);
+
+    const { active = 0, page = 1, page_size = 10, order = "ASC" } = req.query;
+    const students = await findStudentsByTeacherId(teacher_id, Number(page_size), Number(page), order);
+
     if (students === null) return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR', message: 'An error occurred while processing the request.' });
-    if (students.length === 0) return res.status(200).json([`No estudents for ${teacher.name} teacher.`]);
+    if (students.total === 0) return res.status(200).json([`No estudents for ${teacher.name} teacher.`]);
     return res.status(200).json(students);
 })
 

@@ -12,9 +12,18 @@ async function deleteStudent(id) {
     return result.affectedRows;
 }
 
-async function findAllStudents() {
-    const [result] = await pool.query(
-        `SELECT 
+async function findStudents(active, page, page_size, order) {
+    const offset = (page - 1) * page_size;
+    const validOrderValues = ['ASC', 'DESC'];
+    const sortOrder = validOrderValues.includes(order.toUpperCase()) ? order.toUpperCase() : 'ASC';
+
+    const [[totalResult]] = await pool.query(
+        'SELECT COUNT(*) as total FROM students WHERE active = ?',
+        [active]
+    );
+
+    const [data] = await pool.query(
+        `SELECT   
         users.id,
         users.name,
         users.last_names,
@@ -24,42 +33,28 @@ async function findAllStudents() {
         users.image,
         users.role_id,
         students.active
-    FROM 
-        users
-    INNER JOIN 
-        students ON users.id = students.id
-    INNER JOIN 
-        roles ON users.role_id = roles.id
-    WHERE 
-        roles.name = 'student';`
+        FROM 
+            users
+        INNER JOIN 
+            students ON users.id = students.id
+        INNER JOIN 
+            roles ON users.role_id = roles.id
+        WHERE 
+            roles.name = 'student'
+            AND students.active = ?
+        ORDER BY
+            users.id ${sortOrder}
+        LIMIT ? OFFSET ?;`, [active, Number(page_size), offset]
     );
 
-    return result;
+    return {
+        total: totalResult.total,
+        data,
+    };
+
 }
 
-async function findStudentByTeacherId(id) {
-    const [result] = await pool.query(
-        `   SELECT DISTINCT
-                u.id,
-                u.name,
-                u.last_names,
-                u.phone,
-                u.email,
-                u.username,
-                u.image,
-                u.role_id,
-                s.active
-            FROM 
-                student_teacher_relations strl
-            JOIN 
-                students s ON strl.students_id = s.id
-            JOIN 
-                users u ON s.id = u.id
-            WHERE 
-                strl.teachers_id = ?;`, [id]);
-    return result;
-}
 
 module.exports = {
-    findById, deleteStudent, findAllStudents, findStudentByTeacherId
+    findById, deleteStudent, findStudents
 }
