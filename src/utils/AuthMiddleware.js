@@ -16,6 +16,24 @@ const checkRegisterStudentPayload = async (req, res, next) => {
     next();
 }
 
+const checkRegisterTeacherPayload = async (req, res, next) => {
+    const {name,last_names,phone,email,username,password, description, 
+            resume, price_hour, address, city, postal_code, branches } = req.body;
+    if (!name || !last_names || !phone || !email || !username || !password || !description 
+        || !resume || !price_hour || !address || !city || !postal_code || !branches ) {
+        return res.status(400).json({
+            code: 'BAD_REQUEST',
+            message: `The request body must contain the fields: name, last_names, phone, email, username, password, description, resume, price_hour, address, city, postal_code, branches[]`
+        });
+    }
+    let userExist = await findByEmail(email);
+    if (userExist != null) return res.status(409).json({code: 'BAD_REQUEST', message: `User with email ${email} already exist.`});
+    userExist = await findByUsername(username);
+    if (userExist != null) return res.status(409).json({code: 'BAD_REQUEST', message: `User with username ${username} already exist.`});
+    req.body.role = 3;
+    next();
+}
+
 const checkLoginPayload = (req, res, next) => {
     const {email, password} = req.body;
     if (!email || !password) {
@@ -29,5 +47,6 @@ const checkLoginPayload = (req, res, next) => {
 
 module.exports = {
     checkRegisterStudentPayload,
+    checkRegisterTeacherPayload,
     checkLoginPayload
 }
