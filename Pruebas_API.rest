@@ -27,11 +27,12 @@ PATCH {{url}}/api/students/3/delete
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
 ### Admin: Students list : Returns students array.
+### devuelve con paginación
 GET {{url}}/api/students
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhbGJ1cy5kdW1ibGVkb3JlQGhvZ3dhcnRzLmVkdSIsInJvbGUiOjEsImlhdCI6MTczMjM2MDgyMH0.vszPI48PXpmVMRnC9F1sbBoInSb6BrmRD6nUBRPTgvE
 
 ### Teacher: list of students he has now (table Relation)
-GET {{url}}/api/teachers/2/students
+GET {{url}}/api/teachers/10/students
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoicmVtdXMubHVwaW5AaG9nd2FydHMuZWR1Iiwicm9sZSI6MywiaWF0IjoxNzMyNDU1NjIyfQ.4l25qiYZfDlotgrnit1_YLz255iY9YW_4D6xsF00Qjs
 /// checkToken, checkRole(3),
 

@@ -37,13 +37,29 @@ async function findAllStudents() {
     return result;
 }
 
-
 async function findStudentByTeacherId(id) {
     const [result] = await pool.query(
-        'SELECT * FROM students WHERE id = ?;',
-        [id]);
+        `   SELECT DISTINCT
+                u.id,
+                u.name,
+                u.last_names,
+                u.phone,
+                u.email,
+                u.username,
+                u.image,
+                u.role_id,
+                s.active
+            FROM 
+                student_teacher_relations strl
+            JOIN 
+                students s ON strl.students_id = s.id
+            JOIN 
+                users u ON s.id = u.id
+            WHERE 
+                strl.teachers_id = ?;`, [id]);
     return result;
 }
+
 module.exports = {
     findById, deleteStudent, findAllStudents, findStudentByTeacherId
 }
