@@ -29,9 +29,13 @@ router.patch('/:id/delete', checkToken, checkRole(1), async (req, res, next) => 
 
 // Admin : gets students list
 router.get('/', checkToken, checkRole(1), async (req, res, next) => {
-    const { active = 1, page = 1, page_size = 10, order = "ASC" } = req.query;
-    const students = await findStudents(active, page, page_size, order);
-    return res.status(200).json(students);
+    const { active = 1, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
+    const students = await findStudents(active, Number(page_size),Number(page),sort,order);
+    const response = {
+        total: students.total,
+        data: students.data
+    }
+    return res.status(200).json(response);
 })
 
 module.exports = router;
