@@ -1,9 +1,8 @@
 const pool = require("../config/db");
 
 async function register(user){
-    const imageValue = user.image || null;
     const [result] = await pool.query('insert into users (name,last_names,phone,email,username,password,image,role_id) values (?,?,?,?,?,?,?,?)',
-        [user.name, user.last_names, user.phone, user.email, user.username, user.password, imageValue, user.role]);
+        [user.name, user.last_names, user.phone, user.email, user.username, user.password, user.image, user.role]);
     return result.insertId;
 }
 
