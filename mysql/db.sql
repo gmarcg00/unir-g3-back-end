@@ -19,6 +19,8 @@ CREATE TABLE users (
                        password VARCHAR(255) NOT NULL,
                        image LONGTEXT,
                        role_id INT,
+                       latitude decimal(16,10),
+                       longitude decimal(16,10),
                        FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
@@ -33,13 +35,9 @@ CREATE TABLE students (
 CREATE TABLE teachers (
                           id INT PRIMARY KEY,
                           description VARCHAR(2000),
-                          resume VARCHAR(2000),
                           active BOOLEAN DEFAULT FALSE,
                           price_hour INT NOT NULL,
-                          average_rating DOUBLE NULL,
-                          address VARCHAR(255) NOT NULL,
-                          city VARCHAR(100) NOT NULL,
-                          postal_code VARCHAR(20) NOT NULL,
+                          average_rating DOUBLE NULL
                           FOREIGN KEY (id) REFERENCES users(id)
 );
 

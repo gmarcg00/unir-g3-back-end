@@ -1,8 +1,8 @@
 const {findByEmail,findByUsername} = require('../models/UserModel');
 
 const checkRegisterStudentPayload = async (req, res, next) => {
-    const {name,last_names,phone,image,email,username,password} = req.body;
-    if (!name || !last_names || !phone || !image || !email || !username || !password ) {
+    const {name,last_names,phone,image,email,username,password, latitude, longitude} = req.body;
+    if (!name || !last_names || !phone || !image || !email || !username || !password || !latitude || !longitude ) {
         return res.status(400).json({
             code: 'BAD_REQUEST',
             message: 'The request body must contain the fields: name, last_names, phone, image, email, username, and password'
