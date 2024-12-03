@@ -8,6 +8,8 @@ class TeacherInfoResponse {
         this.username = user.username;
         this.image = user.image;
         this.role = user.role_id;
+        this.latitude = user.latitude;
+        this.longitude = user.longitude;
         this.description = teacher.description;
         this.active = teacher.active;
         this.price_hour = teacher.price_hour;

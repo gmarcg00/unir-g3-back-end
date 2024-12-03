@@ -1,8 +1,8 @@
 const pool = require("../config/db");
 
 async function register(user){
-    const [result] = await pool.query('insert into users (name,last_names,phone,email,username,password,image,role_id) values (?,?,?,?,?,?,?,?)',
-        [user.name, user.last_names, user.phone, user.email, user.username, user.password, user.image, user.role]);
+    const [result] = await pool.query('insert into users (name,last_names,phone,email,username,password,image,role_id,latitude,longitude) values (?,?,?,?,?,?,?,?,?,?)',
+        [user.name, user.last_names, user.phone, user.email, user.username, user.password, user.image, user.role, user.latitude, user.longitude]);
     return result.insertId;
 }
 

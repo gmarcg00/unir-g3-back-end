@@ -17,9 +17,9 @@ const checkRegisterStudentPayload = async (req, res, next) => {
 }
 
 const checkRegisterTeacherPayload = async (req, res, next) => {
-    const {name,last_names,phone,image,email,username,password, description, price_hour, branches } = req.body;
+    const {name,last_names,phone,image,email,username,password, description, price_hour, branches, latitude, longitude} = req.body;
     if (!name || !last_names || !phone || !email || !username || !password || !description 
-         || !price_hour || !branches || !image ) {
+         || !price_hour || !branches || !image || !latitude || !longitude ) {
         return res.status(400).json({
             code: 'BAD_REQUEST',
             message: `The request body must contain the fields: name, last_names, phone, email, username, password, description, price_hour, branches[]`

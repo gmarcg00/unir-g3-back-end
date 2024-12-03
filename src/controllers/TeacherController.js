@@ -18,13 +18,18 @@ router.post('/:id/activate', checkToken, checkRole(1), async (req, res, next) =>
 });
 
 router.get('', async (req, res, next) => {
-    const {branches = null, price_hour = null, average_rating = null,  active = 0, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
-    const teachers = await findAll(active,branches, price_hour,average_rating, Number(page_size), Number(page), sort, order);
-    const data = await Promise.all(teachers.data.map(async (teacher) => {
+    const {latitude = null, longitude = null, range=null, branches = null, price_hour = null, average_rating = null,  active = 0, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
+    let teachers = await findAll(active,branches, price_hour,average_rating, Number(page_size), Number(page), sort, order);
+    let data = await Promise.all(teachers.data.map(async (teacher) => {
         let user = await findUserById(teacher.id);
         let knowledgeBranches = await findKnowledgeBranchesByTeacherId(teacher.id);
         return new TeacherInfoResponse(user, teacher, knowledgeBranches);
     }))
+    if(latitude !== null && longitude !== null && range !== null) {
+        const currentLocation = {lat: latitude, lon: longitude};
+        data = filterByDistance(currentLocation, data, range);
+        teachers.total = data.length;
+    }
     const response = {
         total: teachers.total,
         data
@@ -56,5 +61,35 @@ router.get('/:id/students', checkToken, checkRole(3), async (req, res, next) => 
     if (students.total === 0) return res.status(200).json([`No estudents for ${teacher.name} teacher.`]);
     return res.status(200).json(students);
 })
+
+
+function filterByDistance(currentLocation, elements, maxDistance) {
+    const R = 6371;
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const toRadians = (degree) => (degree * Math.PI) / 180;
+
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+
+        const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c;
+    }
+
+    return elements.filter((element) => {
+        const distance = calculateDistance(
+            currentLocation.lat,
+            currentLocation.lon,
+            element.latitude,
+            element.longitude
+        );
+        return distance <= maxDistance;
+    });
+}
 
 module.exports = router;
