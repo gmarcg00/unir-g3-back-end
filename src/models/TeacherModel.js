@@ -21,7 +21,7 @@ async function findKnowledgeBranchesByTeacherId(id) {
     return result;
 }
 
-async function findAll(active, size, page, sort, order) {
+async function findAll(active, branches, priceHour, rating, size, page, sort, order) {
     const offset = (page - 1) * size;
     const validSortFields = ['id', 'price_hour', 'average_rating'];
     const validOrderValues = ['ASC', 'DESC'];
@@ -29,19 +29,63 @@ async function findAll(active, size, page, sort, order) {
     const sortField = validSortFields.includes(sort) ? sort : 'id';
     const sortOrder = validOrderValues.includes(order.toUpperCase()) ? order.toUpperCase() : 'ASC';
 
+    const whereConditions = [];
+    const params = [];
+
+    if (active !== null) {
+        whereConditions.push('teachers.active = ?');
+        params.push(active);
+    }
+
+    if (priceHour !== null) {
+        const priceHours = priceHour.split(',').map(ph => Number(ph));
+        const pricePlaceholders = priceHours.map(() => '?').join(', ');
+        whereConditions.push(`teachers.price_hour IN (${pricePlaceholders})`);
+        params.push(...priceHours);
+    }
+
+    if (rating !== null) {
+        const ratings = rating.split(',').map(r => Number(r));
+        const ratingConditions = ratings.map(() => '(teachers.average_rating >= ? AND teachers.average_rating < ?)').join(' OR ');
+        whereConditions.push(`(${ratingConditions})`);
+        params.push(...ratings.flatMap(r => [r, r + 1]));
+    }
+
+    if (branches && branches.length > 0) {
+        const splitBranches = branches.split(',');
+        const branchPlaceholders = splitBranches.map(() => '?').join(', ');
+        whereConditions.push(`teacher_has_knowledge_branches.knowledge_branches_id IN (${branchPlaceholders})`);
+        params.push(...splitBranches);
+    }
+
+    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+
     const [[totalResult]] = await pool.query(
-        'SELECT COUNT(*) as total FROM teachers WHERE active = ?',
-        [active]
+        `SELECT COUNT(DISTINCT teachers.id) as total
+         FROM teachers
+                  JOIN teacher_has_knowledge_branches
+                       ON teachers.id = teacher_has_knowledge_branches.teachers_id
+             ${whereClause}`,
+        params
     );
+
     const [data] = await pool.query(
-        `SELECT * FROM teachers WHERE active = ? ORDER BY ${sortField} ${sortOrder} LIMIT ? OFFSET ?`,
-        [active, size, offset]
+        `SELECT DISTINCT teachers.*
+         FROM teachers
+                  JOIN teacher_has_knowledge_branches
+                       ON teachers.id = teacher_has_knowledge_branches.teachers_id
+             ${whereClause}
+         ORDER BY ${sortField} ${sortOrder}
+             LIMIT ? OFFSET ?`,
+        [...params, size, offset]
     );
+
     return {
         total: totalResult.total,
         data,
     };
 }
+
 
 async function findStudentsByTeacherId(teacher_id, page_size, page, order) {
     const offset = (page - 1) * page_size;
