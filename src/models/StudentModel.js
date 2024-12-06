@@ -63,38 +63,37 @@ async function deleteStudent(id) {
         return result;
  }
 
-async function findAllStudents() {
-    const [result] = await pool.query(
-        `SELECT 
-        users.id,
-        users.name,
-        users.last_names,
-        users.phone,
-        users.email,
-        users.username,
-        users.image,
-        users.role_id,
-        students.active
-    FROM 
-        users
-    INNER JOIN 
-        students ON users.id = students.id
-    INNER JOIN 
-        roles ON users.role_id = roles.id
-    WHERE 
-        roles.name = 'student';`
+
+async function findStudents(active, size, page,sort, order) {
+    const offset = (page - 1) * size;
+    const validSortFields = ['id'];
+    const validOrderValues = ['ASC', 'DESC'];
+
+    const sortField = validSortFields.includes(sort) ? sort : 'id';
+    const sortOrder = validOrderValues.includes(order.toUpperCase()) ? order.toUpperCase() : 'ASC';
+
+    const [[totalResult]] = await pool.query(
+        'SELECT COUNT(*) as total FROM students WHERE active = ?',
+        [active]
     );
 
-    return result;
+    const [data] = await pool.query(
+        `SELECT students.*, users.*
+         FROM students
+                  JOIN users ON students.id = users.id
+         WHERE students.active = ?
+         ORDER BY students.${sortField} ${sortOrder} 
+     LIMIT ? OFFSET ?`,
+        [active, size, offset]
+    );
+
+    return {
+        total: totalResult.total,
+        data,
+    };
 }
 
 
-async function findStudentByTeacherId(id) {
-    const [result] = await pool.query(
-        'SELECT * FROM students WHERE id = ?;',
-        [id]);
-    return result;
-}
 module.exports = {
-    findById, deleteStudent, findAllStudents, findStudentByTeacherId, studentRatesTeacher, getRatingStudentTeacher
+    findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher
 }

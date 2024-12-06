@@ -1,9 +1,8 @@
 const pool = require("../config/db");
 
 async function register(user){
-    const imageValue = user.image || null;
-    const [result] = await pool.query('insert into users (name,last_names,phone,email,username,password,image,role_id) values (?,?,?,?,?,?,?,?)',
-        [user.name, user.last_names, user.phone, user.email, user.username, user.password, imageValue, user.role]);
+    const [result] = await pool.query('insert into users (name,last_names,phone,email,username,password,image,role_id,latitude,longitude) values (?,?,?,?,?,?,?,?,?,?)',
+        [user.name, user.last_names, user.phone, user.email, user.username, user.password, user.image, user.role, user.latitude, user.longitude]);
     return result.insertId;
 }
 
@@ -13,23 +12,24 @@ async function saveStudent(id) {
     return result.insertId;
 }
 
-async function saveTeacher(id, description, resume, price_hour, address, city, postal_code) {
+async function saveTeacher(id, description, price_hour) {
     const [result] = await pool.query(`INSERT INTO 
-                                        teachers (id, description, resume, price_hour, address, city, postal_code) 
-                                        VALUES (?,?,?,?,?,?,?) `,
-        [id, description, resume, price_hour, address, city, postal_code]);
+                                        teachers (id, description, price_hour,average_rating) 
+                                        VALUES (?,?,?,?) `,
+        [id, description,price_hour,0]);
     return result.insertId;
 }
 
 async function saveTeacherBranches(userId, branches) {
     const results = []
-    const sql_statement = 'INSERT INTO teacher_has_knowledge_branches (teachers_id, knowledge_branches_id) VALUES (?,?)';   
     for (let branch of branches){
-            const values = [userId, branch];
-            const result = await pool.query( sql_statement, values);
-            results.push(result);
-        }
-        return results;
+        const result = await pool.query(
+            'INSERT INTO teacher_has_knowledge_branches (teachers_id, knowledge_branches_id) VALUES (?,?)',
+            [userId, branch]
+        );
+        results.push(result);
+    }
+    return results;
 }
 
 async function findById(id){

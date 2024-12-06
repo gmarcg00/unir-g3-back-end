@@ -19,10 +19,10 @@ router.post('/students/register',checkRegisterStudentPayload, async (req,res,nex
 
 router.post('/teachers/register', checkRegisterTeacherPayload, async (req,res,next) => {
     req.body.password = await bcrypt.hash(req.body.password,8);
-    const {description, resume, price_hour, address, city, postal_code, branches } = req.body;
+    const {description, price_hour, branches } = req.body;
     try{
         const userId = await register(req.body)
-        await saveTeacher(userId, description, resume, price_hour, address, city, postal_code)
+        await saveTeacher(userId,description,price_hour)
         await saveTeacherBranches(userId, branches)
         const user = await findById(userId);
         const token = createToken(user);
