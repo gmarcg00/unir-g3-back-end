@@ -4,6 +4,10 @@ const {register, saveStudent, saveTeacher, saveTeacherBranches, findById, findBy
 const {createToken} = require("../utils/Helper");
 const {checkRegisterStudentPayload, checkRegisterTeacherPayload, checkLoginPayload} = require("../utils/AuthMiddleware");
 
+
+/**
+ * Endpoint para registrar un estudiante
+ */
 router.post('/students/register',checkRegisterStudentPayload, async (req,res,next) => {
     req.body.password = await bcrypt.hash(req.body.password,8);
     try{
@@ -17,6 +21,10 @@ router.post('/students/register',checkRegisterStudentPayload, async (req,res,nex
     }
 });
 
+
+/**
+ * Endpoint para registrar un profesor
+ */
 router.post('/teachers/register', checkRegisterTeacherPayload, async (req,res,next) => {
     req.body.password = await bcrypt.hash(req.body.password,8);
     const {description, price_hour, branches } = req.body;
@@ -32,6 +40,10 @@ router.post('/teachers/register', checkRegisterTeacherPayload, async (req,res,ne
     }
 });
 
+
+/**
+ * Endpoint para hacer login
+ */
 router.post('/login', checkLoginPayload, async (req,res,next) => {
     const {email,password} = req.body;
     const user = await findByEmail(email);
@@ -40,7 +52,6 @@ router.post('/login', checkLoginPayload, async (req,res,next) => {
     if(!isValid) return res.status(401).json({code: "UNAUTHORIZED", message: 'Invalid credentials.'});
     const token = createToken(user);
     return res.status(200).json({token: token});
-})
-
+});
 
 module.exports = router;

@@ -19,7 +19,6 @@ async function deleteStudent(id) {
         `SELECT * FROM student_rates_teacher 
             WHERE student_id = ? AND teacher_id = ?`
         ,[student_id, teacher_id]);
-    console.log(`La select devuelve ${ result.length } `)
 
     if ( result.length === 0 ) {
        [result] = await pool.query(
@@ -38,20 +37,11 @@ async function deleteStudent(id) {
             WHERE teacher_id = ?`,
         [teacher_id]);
 
-    console.log(result[0]);
-
-    console.log(typeof result[0].avg_rating)
     let avg_rating = parseFloat(result[0].avg_rating)
-    console.log(typeof avg_rating)
-    console.log(avg_rating)
-    
-   let  [result2] = await pool.query(
+    await pool.query(
         `UPDATE teachers SET average_rating = ?
         WHERE id = ?`,
         [avg_rating, teacher_id]);
-   
-        console.log(`Registros actualizados de profesores: ${result2.affectedRows}`)
-   return result2.affectedRows;
  }
 
  async function getRatingStudentTeacher(student_id, teacher_id){
