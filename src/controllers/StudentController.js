@@ -1,6 +1,7 @@
 
 const router = require('express').Router();
-const { findById, deleteStudent, findAllStudents } = require("../models/StudentModel");
+const { findById, deleteStudent, findAllStudents, studentRatesTeacher, getRatingStudentTeacher } = require("../models/StudentModel");
+const { findTeacherById } = require("../models/TeacherModel");
 const { findById: findUserById } = require("../models/UserModel");
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
 const StudentInfoResponse = require("./models/StudentInfoResponse");
@@ -25,6 +26,55 @@ router.patch('/:id/delete', checkToken, checkRole(1), async (req, res, next) => 
     student = await findById(id);
     const user = await findUserById(id);
     return res.status(200).json(new StudentInfoResponse(user, student));
+});
+
+// Student: rates teacher
+router.post('/:student_id/rates-teacher/:teacher_id', checkToken, checkRole(3), async (req, res, next) => {
+    
+    const student_id = req.params.student_id;
+    const teacher_id = req.params.teacher_id;
+    console.log(`Aquí llega. Student_id:${student_id} Teacher_id:${teacher_id}`)
+
+    // verificamos que el profesor existe
+    //const teacher = await findTeacherById(teacher_id);
+    const teacher = await findTeacherById(teacher_id);
+    if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} not found.` });
+
+    const {rating, text_rating} = req.body;
+    try{
+        const result = await studentRatesTeacher(student_id, teacher_id, rating, text_rating);
+        return res.status(200).json({ code: 'OK', message: `Student ${student_id} has rated Teacher ${teacher_id} with ${rating} stars` });
+    }catch (error){
+        next(error);
+    } 
+});
+
+router.get('/:student_id/rates-teacher/:teacher_id',checkToken, checkRole(3), async (req, res, next) => {
+    
+    const student_id = req.params.student_id;
+    const teacher_id = req.params.teacher_id;
+
+    const teacher = await findTeacherById(teacher_id);
+    if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} not found.` });
+
+    
+
+    try{
+        const result = await getRatingStudentTeacher(student_id, teacher_id);
+        if (result.length === 1){
+            console.log(result)
+             //return res.status(200).json({rating:`${result.rating}`, text_rating: `${result.text_rating}`});
+             return res.status(200).json(result);
+        }
+        else {
+        return res.status(404).json({rating:'No valorado', text_rating: 'No valorado'});
+        }
+        
+        
+    }catch (error){
+        next(error);
+    } 
+
 });
 
 // Admin : Complete students list

@@ -19,6 +19,8 @@ CREATE TABLE users (
                        password VARCHAR(255) NOT NULL,
                        image LONGTEXT,
                        role_id INT,
+                       latitude decimal(16,10),
+                       longitude decimal(16,10),
                        FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
@@ -33,13 +35,9 @@ CREATE TABLE students (
 CREATE TABLE teachers (
                           id INT PRIMARY KEY,
                           description VARCHAR(2000),
-                          resume VARCHAR(2000),
                           active BOOLEAN DEFAULT FALSE,
                           price_hour INT NOT NULL,
                           average_rating DOUBLE NULL,
-                          address VARCHAR(255) NOT NULL,
-                          city VARCHAR(100) NOT NULL,
-                          postal_code VARCHAR(20) NOT NULL,
                           FOREIGN KEY (id) REFERENCES users(id)
 );
 
@@ -86,4 +84,15 @@ CREATE TABLE IF NOT EXISTS  `student_teacher_relations` (
                                                 FOREIGN KEY (`knowledge_branches_id`)
                                                 REFERENCES  `knowledge_branches` (`id`)
                                                 ON DELETE NO ACTION
-                                                ON UPDATE NO ACTION)
+                                                ON UPDATE NO ACTION);
+
+-- Crear la tabla de valoraciones de estudiante a profesor
+CREATE TABLE IF NOT EXISTS  student_rates_teacher (
+                                            student_id INT NOT NULL,
+                                            teacher_id INT NOT NULL,
+                                            rating decimal(2,1) NOT NULL,
+                                            PRIMARY KEY (student_id, teacher_id),
+                                            CONSTRAINT chek_rating check (rating between 0 and 5),
+											FOREIGN KEY (student_id) references students(id),
+                                            FOREIGN KEY (teacher_id) references teachers(id)										
+                                                )                                                
