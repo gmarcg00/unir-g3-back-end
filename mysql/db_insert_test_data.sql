@@ -50,98 +50,70 @@ INSERT INTO `knowledge_branches` (`name`) VALUES
 ---------------------------------------
 
 -- Insertar Severus Snape en teachers
-INSERT INTO teachers (id, description, resume, price_hour, active, address, city, postal_code)
+INSERT INTO teachers (id, description, active, price_hour)
 SELECT 
     u.id, 
-    'Potions Master and former Head of Slytherin House.' AS description,
-    'Severus Snape is a highly skilled wizard in Potions and Occlumency. 
-     He served as Potions Master at Hogwarts for years and briefly held the 
-     position of Defence Against the Dark Arts professor. Despite his stern demeanor, 
-     Snape was instrumental in the fight against Voldemort and a deeply complex character.' AS resume,
-    95 AS price_hour,
+    'Potions Master and former Head of Slytherin House.Severus Snape is a highly skilled wizard in Potions and Occlumency. 
+     He served as Potions Master at Hogwarts for years and briefly held the position of Defence Against the Dark Arts professor. 
+	' AS description,
     1 AS active,
-    'Calle de Serrano, 45' AS address,
-    'Madrid' AS city,
-    '28001' AS postal_code
+    95 AS price_hour
 FROM 
     users u
 WHERE 
     u.username = 'severus.snape';
 
 -- Insertar Remus Lupin en teachers
-INSERT INTO teachers (id, description, resume, price_hour, active, address, city, postal_code)
+INSERT INTO teachers (id, description, active, price_hour)
 SELECT 
     u.id, 
-    'Defence Against the Dark Arts professor and member of the Order of the Phoenix.' AS description,
-    'Remus Lupin is a skilled wizard with a kind and empathetic nature. 
+    'Defence Against the Dark Arts professor and member of the Order of the Phoenix.Remus Lupin is a skilled wizard with a kind and empathetic nature. 
      Despite his condition as a werewolf, he dedicated his life to teaching and 
      fighting against the forces of darkness. His classes were practical, engaging, 
-     and beloved by students.' AS resume,
-    90 AS price_hour,
+     and beloved by students.' AS description,
     1 AS active,
-    'Avenida de la Constitución, 15' AS address,
-    'Alcalá de Henares' AS city,
-    '28801' AS postal_code
+    90 AS price_hour
 FROM 
     users u
 WHERE 
     u.username = 'remus.lupin';
 
 -- Insertar Gilderoy Lockhart en teachers
-INSERT INTO teachers (id, description, resume, price_hour, active, address, city, postal_code)
+INSERT INTO teachers (id, description, active, price_hour)
 SELECT 
     u.id, 
     'Famous author and former Defence Against the Dark Arts professor.' AS description,
-    'Gilderoy Lockhart is a charming yet self-absorbed wizard known for his 
-     books on magical creatures and encounters. Though his competence as a teacher 
-     was questionable, his flamboyant personality and charisma made him a memorable figure.' AS resume,
-    100 AS price_hour,
     1 AS active,
-    'Calle Mayor, 12' AS address,
-    'San Lorenzo de El Escorial' AS city,
-    '28200' AS postal_code
+    100 AS price_hour
 FROM 
     users u
 WHERE 
     u.username = 'gilderoy.lockhart';
 
 -- Insertar Sybill Trelawney en teachers
-INSERT INTO teachers (id, description, resume, price_hour, active, address, city, postal_code)
+INSERT INTO teachers (id, description, active, price_hour)
 SELECT 
     u.id, 
     'Divination professor at Hogwarts.' AS description,
-    'Sybill Trelawney is a seer who teaches Divination at Hogwarts. 
-     Often eccentric and dramatic, she is known for her cryptic prophecies. 
-     Though not always accurate, she has made a few genuine predictions 
-     that were crucial to the wizarding world.' AS resume,
-    65 AS price_hour,
     1 AS active,
-    'Calle de la Luna, 3' AS address,
-    'Aranjuez' AS city,
-    '28300' AS postal_code
+    65 AS price_hour
 FROM 
     users u
 WHERE 
     u.username = 'sybill.trelawney';
 
 -- Insertar Minerva McGonagall en teachers
-INSERT INTO teachers (id, description, resume, price_hour, active, address, city, postal_code)
+INSERT INTO teachers (id, description, active, price_hour)
 SELECT 
     u.id, 
     'Transfiguration professor and Head of Gryffindor House.' AS description,
-    'Minerva McGonagall is a strict yet fair Transfiguration teacher and Head of Gryffindor House. 
-     A highly skilled witch, she is known for her sharp intellect, no-nonsense demeanor, and 
-     deep dedication to her students and Hogwarts. McGonagall played a crucial role in the 
-     fight against Voldemort, exemplifying courage, wisdom, and leadership.' AS resume,
-    95 AS price_hour,
     1 AS active,
-    'Calle de los Álamos, 8' AS address,
-    'Torrelodones' AS city,
-    '28250' AS postal_code
+    95 AS price_hour
 FROM 
     users u
 WHERE 
     u.username = 'minerva.mcgonagall';
+
 
 
 -- Insert relationships into the teacher_has_knowledge_branches table
