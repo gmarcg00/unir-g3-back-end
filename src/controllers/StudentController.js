@@ -4,6 +4,7 @@ const { findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStu
 const { findTeacherById } = require("../models/TeacherModel");
 const { findById: findUserById } = require("../models/UserModel");
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
+const { checkStudentRatesTeacherPayload } = require("../utils/StudentMiddleware");
 const StudentInfoResponse = require("./models/StudentInfoResponse");
 
 /**
@@ -35,7 +36,7 @@ router.patch('/:id/delete', checkToken, checkRole(1), async (req, res, next) => 
 /**
  * Endpoint para que un estudiante puntúe a un profesor
  */
-router.post('/:student_id/rates-teacher/:teacher_id', checkToken, checkRole(3), async (req, res, next) => {
+router.post('/:student_id/rates-teacher/:teacher_id', checkToken, checkRole(3), checkStudentRatesTeacherPayload, async (req, res, next) => {
     
     const student_id = req.params.student_id;
     const teacher_id = req.params.teacher_id;
