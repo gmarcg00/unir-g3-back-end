@@ -40,7 +40,7 @@ router.post('/login', checkLoginPayload, async (req,res,next) => {
     if(!isValid) return res.status(401).json({code: "UNAUTHORIZED", message: 'Invalid credentials.'});
     const token = createToken(user);
     return res.status(200).json({token: token});
-})
+});
 
 
 module.exports = router;

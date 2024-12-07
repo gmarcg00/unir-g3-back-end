@@ -37,7 +37,7 @@ CREATE TABLE teachers (
                           description VARCHAR(2000),
                           active BOOLEAN DEFAULT FALSE,
                           price_hour INT NOT NULL,
-                          average_rating DOUBLE NULL
+                          average_rating DOUBLE NULL,
                           FOREIGN KEY (id) REFERENCES users(id)
 );
 
@@ -84,4 +84,17 @@ CREATE TABLE IF NOT EXISTS  `student_teacher_relations` (
                                                 FOREIGN KEY (`knowledge_branches_id`)
                                                 REFERENCES  `knowledge_branches` (`id`)
                                                 ON DELETE NO ACTION
-                                                ON UPDATE NO ACTION)
+                                                ON UPDATE NO ACTION
+);
+
+-- Crear la tabla de valoraciones de estudiante a profesor
+CREATE TABLE IF NOT EXISTS  student_rates_teacher (
+                                            student_id INT NOT NULL,
+                                            teacher_id INT NOT NULL,
+                                            rating INT NOT NULL,
+                                            text_rating VARCHAR(2000),
+                                            PRIMARY KEY (student_id, teacher_id),
+                                            CONSTRAINT chek_rating check (rating between 0 and 5),
+											FOREIGN KEY (student_id) references students(id),
+                                            FOREIGN KEY (teacher_id) references teachers(id)										
+);
