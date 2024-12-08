@@ -12,6 +12,18 @@ async function deleteStudent(id) {
     return result.affectedRows;
 }
 
+async function updateStudent(id, data) {
+    const { nombre, email } = data;
+
+    const query = `
+        UPDATE estudiantes
+        SET nombre = ?, email = ?
+        WHERE id = ?
+    `;
+    const [result] = await pool.execute(query, [nombre, email, id]);
+    return result.affectedRows;
+}
+
 // FUNCIÓN PARA PUNTUAR AL PROFESOR
  async function studentRatesTeacher(student_id, teacher_id, rating, text_rating) {
      
@@ -82,8 +94,8 @@ async function findStudents(active, size, page,sort, order) {
         data,
     };
 }
-
+ 
 
 module.exports = {
-    findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher
+    findById, deleteStudent, updateStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher
 }

@@ -87,4 +87,37 @@ router.get('/', checkToken, checkRole(1), async (req, res, next) => {
     return res.status(200).json(response);
 })
 
+/**
+ * Endpoint para actualizar la información de un estudiante
+ */
+router.put('/:id/update', checkToken, checkRole(1), async (req, res, next) => {
+    const id = req.params.id;
+    const { nombre, email } = req.body;
+
+    try {
+        // Verificar si el estudiante existe
+        const student = await findById(id);
+        if (student === null) {
+            return res.status(404).json({ code: 'NOT_FOUND', message: `Student with id ${id} not found.` });
+        }
+
+        // Actualizar la información del estudiante en la base de datos
+        const affectedRows = await updateStudent(id, { nombre, email });
+
+        if (affectedRows === 0) {
+            return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to update the student.' });
+        }
+
+        // Obtener la información actualizada
+        const updatedStudent = await findById(id);
+        const user = await findUserById(id);
+
+        // Devolver la respuesta con los datos actualizados
+        return res.status(200).json(new StudentInfoResponse(user, updatedStudent));
+    } catch (error) {
+        next(error); // Manejo de errores global
+    }
+});
+
+
 module.exports = router;
