@@ -141,14 +141,22 @@ async function findTeacherById(id) {
 }
 
 async function updateTeacher(id, data) {
-    const { nombre, email } = data;
+    const { name, last_names, phone, username, image, description, price_hour, branches } = data;
 
     const query = `
         UPDATE profesores
-        SET nombre = ?, email = ?
+        SET 
+            name = ?, 
+            last_names = ?, 
+            phone = ?, 
+            username = ?, 
+            image = ?, 
+            description = ?, 
+            price_hour = ?, 
+            branches = ?
         WHERE id = ?
     `;
-    const [result] = await pool.execute(query, [nombre, email, id]);
+    const [result] = await pool.execute(query, [name, last_names, phone, username, image, description, price_hour, branches, id]);
     return result.affectedRows;
 }
 

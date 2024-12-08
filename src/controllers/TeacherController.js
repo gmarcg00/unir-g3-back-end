@@ -92,11 +92,11 @@ function filterByDistance(currentLocation, elements, maxDistance) {
     });
 }
 /**
- * Endpoint para actualizar la información de un profesor
+ * Endpoint para actualizar toda la información de un profesor
  */
-router.put('/:id/update', checkToken, checkRole(1), async (req, res, next) => {
+router.put('/:id/update', checkToken, checkRole(2), async (req, res, next) => {
     const id = req.params.id;
-    const { nombre, email } = req.body;
+    const { name, last_names, phone, username, image, description, price_hour, branches } = req.body;
 
     try {
         // Verificar si el profesor existe
@@ -106,7 +106,16 @@ router.put('/:id/update', checkToken, checkRole(1), async (req, res, next) => {
         }
 
         // Actualizar la información del profesor en la base de datos
-        const affectedRows = await updateTeacher(id, { nombre, email });
+        const affectedRows = await updateTeacher(id, {
+            name,
+            last_names,
+            phone,
+            username,
+            image,
+            description,
+            price_hour,
+            branches
+        });
 
         if (affectedRows === 0) {
             return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to update the teacher.' });
@@ -116,7 +125,11 @@ router.put('/:id/update', checkToken, checkRole(1), async (req, res, next) => {
         const updatedTeacher = await findTeacherById(id);
 
         // Devolver la respuesta con los datos actualizados
-        return res.status(200).json({ code: 'OK', message: 'Teacher updated successfully.', teacher: updatedTeacher });
+        return res.status(200).json({ 
+            code: 'OK', 
+            message: 'Teacher updated successfully.', 
+            teacher: updatedTeacher 
+        });
     } catch (error) {
         next(error); // Manejo de errores global
     }
