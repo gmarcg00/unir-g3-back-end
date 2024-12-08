@@ -140,10 +140,23 @@ async function findTeacherById(id) {
     return result[0];
 }
 
+async function updateTeacher(id, data) {
+    const { nombre, email } = data;
+
+    const query = `
+        UPDATE profesores
+        SET nombre = ?, email = ?
+        WHERE id = ?
+    `;
+    const [result] = await pool.execute(query, [nombre, email, id]);
+    return result.affectedRows;
+}
+
 module.exports = {
     findById,
     activateTeacher,
     findTeacherById,
+    updateTeacher,
     findKnowledgeBranchesByTeacherId,
     findAll,
     findStudentsByTeacherId
