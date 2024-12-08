@@ -86,5 +86,5 @@ async function findStudents(active, size, page,sort, order) {
  
 
 module.exports = {
-    findById, deleteStudent, updateStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher
+    findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher
 }
