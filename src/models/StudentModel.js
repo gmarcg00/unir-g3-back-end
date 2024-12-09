@@ -87,7 +87,7 @@ async function findStudents(active, size, page,sort, order) {
 async function getStudentTeachersList(student_id) {
 
     const [result] = await pool.query(
-        `SELECT str.register_data, t.name AS teacher, t.image, k.name AS branch
+        `SELECT t.id, t.name, t.last_names, t.image, k.name AS branch
             FROM student_teacher_relations AS str 
             INNER JOIN users AS t ON str.teachers_id = t.id
 	        INNER JOIN knowledge_branches AS k ON k.id = str.knowledge_branches_id
