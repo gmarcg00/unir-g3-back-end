@@ -7,6 +7,17 @@ async function createChat(student_id, teacher_id) {
     return result.insertId;
     };
 
+    async function checkChatExists(student_id, teacher_id) {
+        const [result] = await pool.query(
+            'SELECT id FROM chats WHERE student_id = ? and teacher_id = ?',
+            [student_id, teacher_id]);
+        if ( result.length === 1 ){
+            return true;
+        } else {
+            return false;
+        }
+    };    
+
     async function postMessage(chat_id, sender_id, message) {
         const [result] = await pool.query(
             'INSERT INTO chat_messages (chat_id, sender_id, message) values (?,?,?)',
