@@ -83,8 +83,23 @@ async function findStudents(active, size, page,sort, order) {
         data,
     };
 }
- 
+
+async function getStudentTeachersList(student_id) {
+
+    const [result] = await pool.query(
+        `SELECT str.register_data, t.name AS teacher, t.image, k.name AS branch
+            FROM student_teacher_relations AS str 
+            INNER JOIN users AS t ON str.teachers_id = t.id
+	        INNER JOIN knowledge_branches AS k ON k.id = str.knowledge_branches_id
+        WHERE str.students_id = ?
+        AND str.register_data <= current_date
+        AND ( str.withdraw_data >= current_date OR
+				str.withdraw_data IS NULL )`,
+        [student_id]);
+    return result;
+
+}
 
 module.exports = {
-    findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher
+    findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList
 }

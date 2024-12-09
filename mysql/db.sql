@@ -98,3 +98,24 @@ CREATE TABLE IF NOT EXISTS  student_rates_teacher (
 											FOREIGN KEY (student_id) references students(id),
                                             FOREIGN KEY (teacher_id) references teachers(id)										
 );
+
+-- Tabla de CHATS
+CREATE TABLE chats (
+  id int NOT NULL AUTO_INCREMENT,
+  student_id int not null,
+  teacher_id int not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+  ) ;
+
+-- Tabla de mensajes de CHAT
+CREATE TABLE chat_messages (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    chat_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    moment TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    message VARCHAR(2000) NOT NULL,
+    FOREIGN KEY (chat_id) REFERENCES chats(id),
+    FOREIGN KEY (sender_id) REFERENCES users(id)
+    );

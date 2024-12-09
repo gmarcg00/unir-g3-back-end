@@ -15,6 +15,7 @@ app.use('/api/auth', require('./controllers/AuthController'));
 app.use('/api/admins', require('./controllers/AdminController'));
 app.use('/api/teachers', require('./controllers/TeacherController'));
 app.use('/api/students', require('./controllers/StudentController'));
+app.use('/api/chats', require('./controllers/ChatController'));
 app.use('/api/knowledge-branches', require('./controllers/KnowledgeBranchController'));
 
 // Error handler
