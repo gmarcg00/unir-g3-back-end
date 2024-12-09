@@ -59,7 +59,7 @@ async function getChatsFromTeacher(teacher_id){
 
 async function getChatsFromStudent(student_id){
     const [result] = await pool.query(
-        `select chats.id, users.name, users.image
+        `select chats.id as id, users.id as user_id, users.name, users.last_names, users.image
             from chats inner join users on users.id = chats.teacher_id
             where student_id = ?`,
         [student_id]
@@ -69,9 +69,8 @@ async function getChatsFromStudent(student_id){
 
 async function getMessagesFromChat(chat_id){
     const [result] = await pool.query(
-        `select chat.moment, users.name, chat.message
-            from chat_messages as chat inner join users on users.id = chat.sender_id
-            where chat.chat_id = ?
+        `select message.id, message.chat_id, message.sender_id, message.moment, message.message
+            from chat_messages as message where message.chat_id = ?
             order by moment desc`,
         [chat_id]
     );
