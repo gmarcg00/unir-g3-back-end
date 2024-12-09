@@ -1,10 +1,12 @@
+const {getTokenRole} = require("./Helper");
+
 const checkMessagePayload = async (req, res, next) => {
-    const {message, sender_id} = req.body;
+    const {chat_id,message, sender_id} = req.body;
     
-    if ( !message || !sender_id) {
+    if (!chat_id || !message || !sender_id) {
         return res.status(400).json({
             code: 'BAD_REQUEST',
-            message: 'The request body must contain the fields SENDER_ID and MESSAGE'
+            message: 'The request body must contain the fields CHAT_ID SENDER_ID and MESSAGE'
         });
     }
     next();
@@ -22,8 +24,14 @@ const checkCreateChatPayload = async (req, res, next) => {
     next();
 }
 
+const checkChatPermissions = (req, res, next) => {
+    const requestRole = getTokenRole(req, res);
+    if ( requestRole !== 2 && requestRole !== 3 ) return res.status(403).json({ code: 'FORBIDDEN', message: `Admins can't create chats` });
+    next();
+}
+
 
 
 module.exports = {
-    checkMessagePayload, checkCreateChatPayload
+    checkMessagePayload, checkCreateChatPayload,checkChatPermissions
 };
