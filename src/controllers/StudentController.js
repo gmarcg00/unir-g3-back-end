@@ -88,6 +88,7 @@ router.get('/', checkToken, checkRole(1), async (req, res, next) => {
     return res.status(200).json(response);
 });
 
+
 /**
  * Endpoint para lista de profesores de un alumno
  */
@@ -101,4 +102,5 @@ router.get('/teachers', checkToken, checkRole(3), async (req, res, next) => {
     
     return res.status(200).json(result);
 });
+
 module.exports = router;

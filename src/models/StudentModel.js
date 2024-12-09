@@ -12,6 +12,7 @@ async function deleteStudent(id) {
     return result.affectedRows;
 }
 
+
 // FUNCIÓN PARA PUNTUAR AL PROFESOR
  async function studentRatesTeacher(student_id, teacher_id, rating, text_rating) {
      
@@ -98,7 +99,6 @@ async function getStudentTeachersList(student_id) {
     return result;
 
 }
-
 
 module.exports = {
     findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList
