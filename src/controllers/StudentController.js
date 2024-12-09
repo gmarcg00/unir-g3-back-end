@@ -92,15 +92,13 @@ router.get('/', checkToken, checkRole(1), async (req, res, next) => {
 /**
  * Endpoint para lista de profesores de un alumno
  */
-
-router.get('/teachers', checkToken, checkRole(3), async (req, res, next) => {
+router.get('/:id/teachers', checkToken, checkRole(3), async (req, res, next) => {
 
     const student_id = getTokenId(req, res);
+    if( student_id !== Number(req.params.id)) return res.status(403).json({code: 'FORBIDDEN', message: 'You are not authorized to access this resource'});
 
     const result = await getStudentTeachersList(student_id);
-    if ( result.length === 0 ) return res.status(404).json({code: 'NOT_FOUND', message: `The student doesn't have teachers related`});
-    
-    return res.status(200).json(result);
+    return res.status(200).json({data:result});
 });
 
 module.exports = router;
