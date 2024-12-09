@@ -1,11 +1,12 @@
 
 const router = require('express').Router();
-const { findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher } = require("../models/StudentModel");
+const { findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList } = require("../models/StudentModel");
 const { findTeacherById } = require("../models/TeacherModel");
 const { findById: findUserById } = require("../models/UserModel");
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
 const { checkStudentRatesTeacherPayload } = require("../utils/StudentMiddleware");
 const StudentInfoResponse = require("./models/StudentInfoResponse");
+const { getTokenId } = require('../utils/Helper');
 
 /**
  * Endpoint para obtener la información de un estudiante
@@ -85,6 +86,19 @@ router.get('/', checkToken, checkRole(1), async (req, res, next) => {
         data: students.data
     }
     return res.status(200).json(response);
-})
+});
 
+/**
+ * Endpoint para lista de profesores de un alumno
+ */
+
+router.get('/teachers', checkToken, checkRole(3), async (req, res, next) => {
+
+    const student_id = getTokenId(req, res);
+
+    const result = await getStudentTeachersList(student_id);
+    if ( result.length === 0 ) return res.status(404).json({code: 'NOT_FOUND', message: `The student doesn't have teachers related`});
+    
+    return res.status(200).json(result);
+});
 module.exports = router;
