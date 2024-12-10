@@ -93,15 +93,5 @@ function filterByDistance(currentLocation, elements, maxDistance) {
     });
 }
 
-/**
- * Endpoint para lista de alumnos de un profesor
- */
-/*router.get('/:id/students', checkToken, checkRole(2), async (req, res, next) => {
-    const teacher_id = getTokenId(req, res);
-    if( teacher_id !== Number(req.params.id)) return res.status(403).json({code: 'FORBIDDEN', message: 'You are not authorized to access this resource'});
 
-    const result = await getTeacherStudentsList(teacher_id);
-    return res.status(200).json({data:result});
-});
-*/
 module.exports = router;
