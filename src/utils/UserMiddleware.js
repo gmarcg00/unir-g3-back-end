@@ -13,14 +13,16 @@ const checkToken = async (req, res, next) => {
     }
 
     const user = await findById(data.id);
+    console.log(`Usuario logado: ${data.id}`)
     if(!user) return res.status(403).json({code: "UNAUTHORIZED", message: 'User not found.'});
     next();
 }
 
 const checkRole = (requiredRole) => {
+    
     return (req,res,next) =>{
         const requestRole = getTokenRole(req, res);
-        if(requestRole !== requiredRole) return res.status(403).json({code: "FORBIDDEN", message: 'User not authorized .'});
+        if(requestRole !== requiredRole) return res.status(403).json({code: "FORBIDDEN", message: 'CHECKROLE User not authorized .'});
         next();
     }
 }

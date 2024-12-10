@@ -114,6 +114,8 @@ async function findStudentsByTeacherId(teacher_id, page_size, page, order) {
                 u.username,
                 u.image,
                 u.role_id,
+                u.latitude,
+                u.longitude,
                 s.active
             FROM 
                 student_teacher_relations strl
@@ -146,5 +148,5 @@ module.exports = {
     findTeacherById,
     findKnowledgeBranchesByTeacherId,
     findAll,
-    findStudentsByTeacherId
+    findStudentsByTeacherId,
 }
