@@ -1,10 +1,10 @@
 
 const router = require('express').Router();
-const { findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList } = require("../models/StudentModel");
-const { findTeacherById } = require("../models/TeacherModel");
+const { findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList, createStudentTeacherLink, checkStudentTeacherLink } = require("../models/StudentModel");
+const { findTeacherById, checkKnowledgeBranchForTeacher } = require("../models/TeacherModel");
 const { findById: findUserById } = require("../models/UserModel");
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
-const { checkStudentRatesTeacherPayload } = require("../utils/StudentMiddleware");
+const { checkStudentRatesTeacherPayload, checkLinkTeacherPayload } = require("../utils/StudentMiddleware");
 const StudentInfoResponse = require("./models/StudentInfoResponse");
 const { getTokenId } = require('../utils/Helper');
 
@@ -99,6 +99,27 @@ router.get('/:id/teachers', checkToken, checkRole(3), async (req, res, next) => 
 
     const result = await getStudentTeachersList(student_id);
     return res.status(200).json({data:result});
+});
+
+/* ENDPOINT PARA LINKAR ALUMNO Y PROFESOR */
+router.post('/:id/link-teacher', checkToken, checkRole(3), checkLinkTeacherPayload, async (req, res, next) => {
+
+    const student_id = getTokenId(req, res);
+    if( student_id !== Number(req.params.id)) return res.status(403).json({code: 'FORBIDDEN', message: 'You are not authorized to access this resource'});
+
+    const { teacher_id, knowledge_branch_id } = req.body;
+    const branchApplies = await checkKnowledgeBranchForTeacher(teacher_id, knowledge_branch_id);
+    if (branchApplies === false) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} doesn't teach knowledge branch ${knowledge_branch_id}` });
+
+    const teacher = await findTeacherById(teacher_id);
+    if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} not found.` });
+
+    const alreadyExists = await checkStudentTeacherLink(student_id, teacher_id, knowledge_branch_id);
+    if ( alreadyExists ) return res.status(409).json({code:'CONFLICT',message:'Student and Teacher are already linked by this branch'});
+
+    const created = await createStudentTeacherLink(student_id, teacher_id, knowledge_branch_id);
+    if ( created ) return res.status(201).json({message:'Student and teacher are now linked'})
+    return res.status(500).json({code:'INTERNAL_SERVER_ERROR', message:`Link can't be created`});
 });
 
 module.exports = router;

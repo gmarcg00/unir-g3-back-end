@@ -21,6 +21,19 @@ async function findKnowledgeBranchesByTeacherId(id) {
     return result;
 }
 
+async function checkKnowledgeBranchForTeacher(teacher_id, branch_id){
+    const [result] = await pool.query(
+        `SELECT knowledge_branches_id 
+        FROM teacher_has_knowledge_branches 
+        WHERE teachers_id = ? AND knowledge_branches_id = ?;`,
+        [teacher_id, branch_id]);
+    if (result.length === 0){
+        return false;
+    } else {
+        return true;
+    }
+}
+
 async function findAll(active, branches, priceHour, rating, size, page, sort, order) {
     const offset = (page - 1) * size;
     const validSortFields = ['id', 'price_hour', 'average_rating'];
@@ -146,5 +159,6 @@ module.exports = {
     findTeacherById,
     findKnowledgeBranchesByTeacherId,
     findAll,
-    findStudentsByTeacherId
+    findStudentsByTeacherId,
+    checkKnowledgeBranchForTeacher
 }
