@@ -47,7 +47,7 @@ router.get('/:id/info', checkToken, async (req, res, next) => {
     return res.status(200).json(new TeacherInfoResponse(user, teacher, knowledgeBranches));
 });
 
-// Sobre este endpoint, la consulta en base de datos no es correcta. Tendrás que buscar en la tabla intermedia entre profesores y alumnos, quedarte con los registros en los que aparezca el id del profesor, y luego hacer el join para recuperar la información de los estudiantes y usuarios. Lo que se tiene que devolver finalmente es un array de StudentInfoResponse.
+
 /// Teacher: list of students he has now (table Relation)
 router.get('/:id/students', checkToken, checkRole(2), async (req, res, next) => {
     const teacher_id = req.params.id;
