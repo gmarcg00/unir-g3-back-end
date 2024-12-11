@@ -18,15 +18,15 @@ router.post('/:id/activate', checkToken, checkRole(1), async (req, res, next) =>
 });
 
 router.get('', async (req, res, next) => {
-    const {latitude = null, longitude = null, range=null, branches = null, price_hour = null, average_rating = null,  active = 0, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
-    let teachers = await findAll(active,branches, price_hour,average_rating, Number(page_size), Number(page), sort, order);
+    const { latitude = null, longitude = null, range = null, branches = null, price_hour = null, average_rating = null, active = 0, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
+    let teachers = await findAll(active, branches, price_hour, average_rating, Number(page_size), Number(page), sort, order);
     let data = await Promise.all(teachers.data.map(async (teacher) => {
         let user = await findUserById(teacher.id);
         let knowledgeBranches = await findKnowledgeBranchesByTeacherId(teacher.id);
         return new TeacherInfoResponse(user, teacher, knowledgeBranches);
     }))
-    if(latitude !== null && longitude !== null && range !== null) {
-        const currentLocation = {lat: latitude, lon: longitude};
+    if (latitude !== null && longitude !== null && range !== null) {
+        const currentLocation = { lat: latitude, lon: longitude };
         data = filterByDistance(currentLocation, data, range);
         teachers.total = data.length;
     }
@@ -49,7 +49,7 @@ router.get('/:id/info', checkToken, async (req, res, next) => {
 
 // Sobre este endpoint, la consulta en base de datos no es correcta. Tendrás que buscar en la tabla intermedia entre profesores y alumnos, quedarte con los registros en los que aparezca el id del profesor, y luego hacer el join para recuperar la información de los estudiantes y usuarios. Lo que se tiene que devolver finalmente es un array de StudentInfoResponse.
 /// Teacher: list of students he has now (table Relation)
-router.get('/:id/students', checkToken, checkRole(3), async (req, res, next) => {
+router.get('/:id/students', checkToken, checkRole(2), async (req, res, next) => {
     const teacher_id = req.params.id;
     const teacher = await findById(teacher_id);
     if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} not found.` });
