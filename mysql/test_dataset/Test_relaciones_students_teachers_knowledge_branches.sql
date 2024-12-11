@@ -1,3 +1,4 @@
+USE hogwarts;
 -- Verificar relaciones creadas en las tablas students, teacher_has_knowledge_branches y student_teacher_relations
 
 SELECT 
