@@ -100,6 +100,33 @@ async function getStudentTeachersList(student_id) {
 
 }
 
+async function createStudentTeacherLink(student_id, teacher_id, branch_id){
+    const [result] = await pool.query(
+        `INSERT INTO student_teacher_relations (register_data, students_id, teachers_id, knowledge_branches_id) 
+         VALUES (CURRENT_DATE,?,?,?)`,
+        [student_id, teacher_id, branch_id]);
+        if (result.affectedRows === 0) return false;
+        return true;
+}
+
+async function checkStudentTeacherLink(student_id, teacher_id, branch_id){
+    const [result] = await pool.query(
+        `SELECT id FROM student_teacher_relations 
+        WHERE students_id = ? 
+          AND teachers_id = ?
+          AND knowledge_branches_id = ?`,
+        [student_id, teacher_id, branch_id]);
+        if (result.length === 0) return false;
+        return true;
+}
+
 module.exports = {
-    findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList
+    findById, 
+    deleteStudent, 
+    findStudents, 
+    studentRatesTeacher, 
+    getRatingStudentTeacher, 
+    getStudentTeachersList,
+    createStudentTeacherLink,
+    checkStudentTeacherLink
 }
