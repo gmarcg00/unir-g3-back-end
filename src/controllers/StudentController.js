@@ -101,7 +101,9 @@ router.get('/:id/teachers', checkToken, checkRole(3), async (req, res, next) => 
     return res.status(200).json({data:result});
 });
 
-/* ENDPOINT PARA LINKAR ALUMNO Y PROFESOR */
+/**
+ * Endpoint para linkar alumno y profesor
+ */ 
 router.post('/:id/link-teacher', checkToken, checkRole(3), checkLinkTeacherPayload, async (req, res, next) => {
 
     const student_id = getTokenId(req, res);
@@ -118,7 +120,7 @@ router.post('/:id/link-teacher', checkToken, checkRole(3), checkLinkTeacherPaylo
     if ( alreadyExists ) return res.status(409).json({code:'CONFLICT',message:'Student and Teacher are already linked by this branch'});
 
     const created = await createStudentTeacherLink(student_id, teacher_id, knowledge_branch_id);
-    if ( created ) return res.status(201).json({message:'Student and teacher are now linked'})
+    if ( created ) return res.status(200).json({message:'Student and teacher are now linked'})
     return res.status(500).json({code:'INTERNAL_SERVER_ERROR', message:`Link can't be created`});
 });
 
