@@ -1,5 +1,5 @@
 class TeacherInfoResponse {
-    constructor(user,teacher,knowledge_branches) {
+    constructor(user, teacher, knowledge_branches) {
         this.id = user.id;
         this.name = user.name;
         this.last_names = user.last_names;
