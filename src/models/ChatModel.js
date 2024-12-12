@@ -71,7 +71,7 @@ async function getMessagesFromChat(chat_id){
     const [result] = await pool.query(
         `select message.id, message.chat_id, message.sender_id, message.moment, message.message
             from chat_messages as message where message.chat_id = ?
-            order by moment desc`,
+            order by moment asc`,
         [chat_id]
     );
     return result;
