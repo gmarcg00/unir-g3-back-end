@@ -86,7 +86,7 @@ async function findStudents(active, size, page,sort, order) {
 
 async function getStudentTeachersList(student_id) {
     const [result] = await pool.query(
-        `SELECT
+        `SELECT DISTINCT
              u.id,
              u.name,
              u.last_names,
