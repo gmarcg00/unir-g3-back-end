@@ -18,7 +18,7 @@ router.post('/:id/activate', checkToken, checkRole(1), async (req, res, next) =>
 });
 
 router.get('', async (req, res, next) => {
-    const { latitude = null, longitude = null, range = null, branches = null, price_hour = null, average_rating = null, active = 0, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
+    const { latitude = null, longitude = null, range = null, branches = null, price_hour = null, average_rating = null, active = 1, page = 1, page_size = 10, sort = "id", order = "ASC" } = req.query;
     let teachers = await findAll(active, branches, price_hour, average_rating, Number(page_size), Number(page), sort, order);
     let data = await Promise.all(teachers.data.map(async (teacher) => {
         let user = await findUserById(teacher.id);
