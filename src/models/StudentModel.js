@@ -85,19 +85,23 @@ async function findStudents(active, size, page,sort, order) {
 }
 
 async function getStudentTeachersList(student_id) {
-
     const [result] = await pool.query(
-        `SELECT t.id, t.name, t.last_names, t.image, k.name AS branch
-            FROM student_teacher_relations AS str 
-            INNER JOIN users AS t ON str.teachers_id = t.id
-	        INNER JOIN knowledge_branches AS k ON k.id = str.knowledge_branches_id
-        WHERE str.students_id = ?
-        AND str.register_data <= current_date
-        AND ( str.withdraw_data >= current_date OR
-				str.withdraw_data IS NULL )`,
-        [student_id]);
+        `SELECT
+             u.id,
+             u.name,
+             u.last_names,
+             u.image,
+             t.description,
+             t.active,
+             t.price_hour,
+             t.average_rating
+         FROM student_teacher_relations AS str
+                  INNER JOIN teachers AS t ON str.teachers_id = t.id
+                  INNER JOIN users AS u ON u.id = t.id
+         WHERE str.students_id = ?;`,
+        [student_id]
+    );
     return result;
-
 }
 
 async function createStudentTeacherLink(student_id, teacher_id, branch_id){
