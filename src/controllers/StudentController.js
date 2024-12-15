@@ -1,12 +1,13 @@
 
 const router = require('express').Router();
 const { findById, deleteStudent, findStudents, studentRatesTeacher, getRatingStudentTeacher, getStudentTeachersList, createStudentTeacherLink, checkStudentTeacherLink } = require("../models/StudentModel");
-const { findTeacherById, checkKnowledgeBranchForTeacher } = require("../models/TeacherModel");
+const { findTeacherById, checkKnowledgeBranchForTeacher, findKnowledgeBranchesByTeacherId} = require("../models/TeacherModel");
 const { findById: findUserById } = require("../models/UserModel");
 const { checkToken, checkRole } = require("../utils/UserMiddleware");
 const { checkStudentRatesTeacherPayload, checkLinkTeacherPayload } = require("../utils/StudentMiddleware");
 const StudentInfoResponse = require("./models/StudentInfoResponse");
 const { getTokenId } = require('../utils/Helper');
+const TeacherInfoResponse = require("./models/TeacherInfoResponse");
 
 /**
  * Endpoint para obtener la información de un estudiante
@@ -97,8 +98,13 @@ router.get('/:id/teachers', checkToken, checkRole(3), async (req, res, next) => 
     const student_id = getTokenId(req, res);
     if( student_id !== Number(req.params.id)) return res.status(403).json({code: 'FORBIDDEN', message: 'You are not authorized to access this resource'});
 
-    const result = await getStudentTeachersList(student_id);
-    return res.status(200).json({data:result});
+    const teachers = await getStudentTeachersList(student_id);
+    let data = await Promise.all(teachers.map(async (teacher) => {
+        let user = await findUserById(teacher.id);
+        let knowledgeBranches = await findKnowledgeBranchesByTeacherId(teacher.id);
+        return new TeacherInfoResponse(user, teacher, knowledgeBranches);
+    }))
+    return res.status(200).json({data:data});
 });
 
 /**
