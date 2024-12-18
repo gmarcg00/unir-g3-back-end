@@ -116,8 +116,6 @@ router.post('/:id/link-teacher', checkToken, checkRole(3), checkLinkTeacherPaylo
     if( student_id !== Number(req.params.id)) return res.status(403).json({code: 'FORBIDDEN', message: 'You are not authorized to access this resource'});
 
     const { teacher_id, knowledge_branch_id } = req.body;
-    const branchApplies = await checkKnowledgeBranchForTeacher(teacher_id, knowledge_branch_id);
-    if (branchApplies === false) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} doesn't teach knowledge branch ${knowledge_branch_id}` });
 
     const teacher = await findTeacherById(teacher_id);
     if (teacher === null) return res.status(404).json({ code: 'NOT_FOUND', message: `Teacher with id ${teacher_id} not found.` });
