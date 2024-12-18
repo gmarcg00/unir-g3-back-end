@@ -1,6 +1,6 @@
 const {checkToken} = require("../utils/UserMiddleware");
 const {checkMessagePayload, checkChatPermissions} = require("../utils/ChatMiddleware");
-const {checkChatExists, checkParticipantInChat, postMessage, getMessagesFromChat} = require("../models/ChatModel");
+const {checkParticipantInChat, postMessage, getMessagesFromChat, checkChatExistsById} = require("../models/ChatModel");
 const {getTokenId} = require("../utils/Helper");
 const MessageResponse = require("./models/MessageResponse");
 const router = require('express').Router();
@@ -12,7 +12,7 @@ const router = require('express').Router();
 router.post('', checkToken, checkMessagePayload, async (req, res, next) => {
     const {chat_id, message, sender_id} = req.body;
 
-    const chatExists = await checkChatExists(chat_id);
+    const chatExists = await checkChatExistsById(chat_id);
     if ( chatExists === false ) return res.status(400).json({ code: 'BAD_REQUEST', message: `Chat with ID ${chat_id} doesn't exist.`});
 
     const SenderInChat = await checkParticipantInChat(sender_id, chat_id);

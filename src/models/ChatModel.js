@@ -25,7 +25,7 @@ async function createChat(student_id, teacher_id) {
         return result.insertId;
         };
 
-async function checkChatExists(id_chat){
+async function checkChatExistsById(id_chat){
     const [result] = await pool.query(
         `SELECT id FROM chats where id = ?`, 
         [id_chat]);
@@ -78,5 +78,5 @@ async function getMessagesFromChat(chat_id){
 }
 
 module.exports = {
-    createChat, postMessage, checkChatExists, getMessagesFromChat, checkParticipantInChat, getChatsFromStudent, getChatsFromTeacher
+    createChat, postMessage, checkChatExists, getMessagesFromChat, checkParticipantInChat, getChatsFromStudent, getChatsFromTeacher,checkChatExistsById
 }
