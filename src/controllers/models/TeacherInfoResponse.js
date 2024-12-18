@@ -14,6 +14,7 @@ class TeacherInfoResponse {
         this.active = teacher.active;
         this.price_hour = teacher.price_hour;
         this.knowledge_branches = knowledge_branches;
+        this.average_rating = teacher.average_rating;
     }
 }
 
